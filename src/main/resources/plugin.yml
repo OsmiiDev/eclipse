@@ -1,0 +1,33 @@
+api-version: '1.20'
+main: dev.osmii.shadow.Shadow
+
+name: 'Shadow'
+description: 'Plugin for the game Shadow'
+version: '0.0.1'
+author: 'Osmii'
+
+commands:
+    shadowchat:
+        description: Chat command for shadows
+        aliases: [sc]
+    $cancel:
+        description: Cancels a game start
+        permission: shadow.admin
+    $roles:
+        description: Open role list menu
+        permission: shadow.admin
+    $location:
+      description: Sets the center location of the game
+      permission: shadow.admin
+    $start:
+      description: Starts the game
+      permission: shadow.admin
+permissions:
+  shadow.admin:
+    description: Full administrative control over enchants
+    default: op
+  shadow.use:
+    description: Allows basic use of plugin functionality
+    default: true
+
+depend: [ProtocolLib]

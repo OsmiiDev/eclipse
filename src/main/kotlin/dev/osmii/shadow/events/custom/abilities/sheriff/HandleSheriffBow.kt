@@ -1,0 +1,47 @@
+package dev.osmii.shadow.events.custom.abilities.sheriff
+
+import dev.osmii.shadow.Shadow
+import dev.osmii.shadow.enums.Namespace
+import org.bukkit.Sound
+import org.bukkit.entity.EntityType
+import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.entity.EntityShootBowEvent
+import org.bukkit.inventory.ItemStack
+import org.bukkit.persistence.PersistentDataType
+
+class HandleSheriffBow(var shadow: Shadow) : Listener {
+
+    private var sheriffArrows: HashMap<Int, ItemStack> = HashMap()
+    private var sheriffs: HashMap<Int, Player> = HashMap()
+
+    @EventHandler
+    fun onShoot(e: EntityShootBowEvent) {
+        if (e.bow?.itemMeta == null || !e.bow?.itemMeta?.persistentDataContainer?.has(Namespace.CUSTOM_ID, PersistentDataType.STRING)!!) return
+        if (!e.bow?.itemMeta?.persistentDataContainer?.get(Namespace.CUSTOM_ID, PersistentDataType.STRING).equals("sheriff-bow")) return
+        if (e.entity !is Player) return
+
+        e.projectile.isGlowing = true
+        sheriffArrows[e.projectile.entityId] = e.bow!!
+        sheriffs[e.projectile.entityId] = e.entity as Player
+    }
+
+    @EventHandler
+    fun onHit(e: EntityDamageByEntityEvent) {
+        if(e.damager.entityId !in sheriffArrows.keys) return
+        if(sheriffs[e.damager.entityId] == null || sheriffs[e.damager.entityId]?.isOnline == false) return
+        e.damage = 1000.0
+        if(e.entityType == EntityType.ENDER_DRAGON || e.entityType == EntityType.WITHER) {
+            // Disable damage to boss entities
+            e.damage = 0.0
+            sheriffs[e.damager.entityId]?.world?.strikeLightning(sheriffs[e.damager.entityId]!!.location)
+        }
+
+        // Break bow
+        val bow = sheriffArrows[e.damager.entityId]
+        sheriffs[e.damager.entityId]?.playSound(sheriffs[e.damager.entityId]!!.location, Sound.ITEM_SHIELD_BREAK, 1.0f, 1.0f)
+        bow?.amount = 0
+    }
+}
