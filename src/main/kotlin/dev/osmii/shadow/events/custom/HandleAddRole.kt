@@ -6,7 +6,6 @@ import dev.osmii.shadow.enums.Namespace
 import dev.osmii.shadow.enums.PlayableFaction
 import dev.osmii.shadow.enums.PlayableRole
 import dev.osmii.shadow.enums.PlayableSubfaction
-import dev.osmii.shadow.game.rolelist.Rolelist
 import dev.osmii.shadow.game.rolelist.RolelistSelector
 import dev.osmii.shadow.util.ItemUtil
 import org.bukkit.Bukkit

@@ -19,7 +19,6 @@ class PacketHideItemSwitch(val shadow: Shadow) : PacketAdapter(
         if(e.player.entityId == e.packet.integers.read(0)) return
         val p = e.packet
 
-        val entityId = p.integers.read(0)
         val equipment = p.slotStackPairLists.read(0)
         val itemSlot = equipment[0].first
         val item = equipment[0].second

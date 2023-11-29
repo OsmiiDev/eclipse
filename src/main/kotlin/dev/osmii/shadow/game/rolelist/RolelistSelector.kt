@@ -1,6 +1,5 @@
 package dev.osmii.shadow.game.rolelist
 
-import com.comphenix.protocol.PacketType.Play
 import dev.osmii.shadow.enums.PlayableFaction
 import dev.osmii.shadow.enums.PlayableRole
 import dev.osmii.shadow.enums.PlayableSubfaction
@@ -9,7 +8,6 @@ import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import java.util.*
-import kotlin.collections.ArrayList
 
 class RolelistSelector {
 

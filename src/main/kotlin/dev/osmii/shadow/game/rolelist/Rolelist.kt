@@ -2,7 +2,6 @@ package dev.osmii.shadow.game.rolelist
 
 import dev.osmii.shadow.enums.PlayableFaction
 import dev.osmii.shadow.enums.PlayableRole
-import io.papermc.paper.event.player.PlayerFailMoveEvent.FailReason
 import org.bukkit.Bukkit
 
 class Rolelist {
