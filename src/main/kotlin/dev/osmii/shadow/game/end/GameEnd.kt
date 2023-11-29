@@ -2,9 +2,14 @@ package dev.osmii.shadow.game.end
 
 import dev.osmii.shadow.Shadow
 import dev.osmii.shadow.enums.*
-import net.md_5.bungee.api.ChatMessageType
+import dev.osmii.shadow.util.TimeUtil
+import net.kyori.adventure.audience.Audience
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.JoinConfiguration
+import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.minimessage.MiniMessage
+import net.kyori.adventure.title.Title
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitTask
 import java.util.concurrent.atomic.AtomicInteger
@@ -18,10 +23,10 @@ class GameEnd(var shadow: Shadow) {
     private var damagerTask = AtomicReference<BukkitTask>()
 
     fun checkGameEnd() {
-        // Check that the game is actually over
+        // Check that the game is actually over (overrides if ender dragon was killed)
         val villagersAlive = AtomicReference(false)
         val shadowsAlive = AtomicReference(false)
-        shadow.gameState.currentRoles.forEach { (uuid, role) ->
+        shadow.gameState.currentRoles.forEach { (_, role) ->
             if (role.roleFaction == PlayableFaction.SHADOW) shadowsAlive.set(true)
             if (role.roleFaction == PlayableFaction.VILLAGE) villagersAlive.set(true)
         }
@@ -39,9 +44,16 @@ class GameEnd(var shadow: Shadow) {
 
         when (result) {
             GameResult.SHADOW_WINS -> {
-                shadow.server.broadcastMessage("${ChatColor.RED}The shadows have won!")
+                shadow.server.broadcast(MiniMessage.miniMessage().deserialize("<red>The shadows have won!</red>"))
+
                 shadow.server.onlinePlayers.forEach { p ->
-                    p.sendTitle("${ChatColor.RED}Shadows Win", "", 10, 70, 20)
+                    p.showTitle(
+                        Title.title(
+                            MiniMessage.miniMessage().deserialize("<red>Shadows Win</red>"),
+                            Component.empty(),
+                            Title.Times.times(TimeUtil.ticks(10), TimeUtil.ticks(70), TimeUtil.ticks(20))
+                        )
+                    )
                 }
 
                 shadow.gameState.originalRoles.forEach { (uuid, role) ->
@@ -53,10 +65,16 @@ class GameEnd(var shadow: Shadow) {
             }
 
             GameResult.VILLAGE_WINS -> {
-                shadow.server.broadcastMessage("${ChatColor.GREEN}The village has won!")
+                shadow.server.broadcast(MiniMessage.miniMessage().deserialize("<green>The villagers have won!</green>"))
 
                 shadow.server.onlinePlayers.forEach { p ->
-                    p.sendTitle("${ChatColor.GREEN}Villagers Win", "", 10, 70, 20)
+                    p.showTitle(
+                        Title.title(
+                            MiniMessage.miniMessage().deserialize("<green>Villagers Win</green>"),
+                            Component.empty(),
+                            Title.Times.times(TimeUtil.ticks(10), TimeUtil.ticks(70), TimeUtil.ticks(20))
+                        )
+                    )
                 }
 
                 shadow.gameState.originalRoles.forEach { (uuid, role) ->
@@ -68,20 +86,30 @@ class GameEnd(var shadow: Shadow) {
             }
 
             GameResult.DRAW -> {
-                shadow.server.broadcastMessage("${ChatColor.GRAY}The game has ended in a draw!")
+                shadow.server.broadcast(MiniMessage.miniMessage().deserialize("<gray>The game has ended in a draw!</gray>"))
                 shadow.server.onlinePlayers.forEach { p ->
-                    p.sendTitle("${ChatColor.GRAY}Match Draw", "", 10, 70, 20)
+                    p.showTitle(
+                        Title.title(
+                            MiniMessage.miniMessage().deserialize("<gray>Match Draw</gray>"),
+                            Component.empty(),
+                            Title.Times.times(TimeUtil.ticks(10), TimeUtil.ticks(70), TimeUtil.ticks(20))
+                        )
+                    )
                 }
             }
         }
 
         shadow.server.onlinePlayers.forEach { p ->
-            p.sendMessage("${ChatColor.BLUE}Game winners: ${
-                shadow.gameState.currentWinners.joinTo(
-                    StringBuilder(),
-                    "${ChatColor.BLUE}, "
-                ) { "${ChatColor.GOLD}${it.name}" }
-            }")
+            p.sendMessage(
+                Component.text("Game winners: ")
+                    .color(NamedTextColor.BLUE)
+                    .append(
+                        Component.join(
+                            JoinConfiguration.separator(Component.text(", ").color(NamedTextColor.BLUE)),
+                            shadow.gameState.currentWinners.map { Component.text(it.name).color(NamedTextColor.GOLD) }
+                        )
+                    )
+            )
         }
     }
 
@@ -95,14 +123,14 @@ class GameEnd(var shadow: Shadow) {
         if (villagersAlive == 1 && shadowsAlive == 1) {
             // Send anti-stall notification
             shadow.server.onlinePlayers.forEach { p ->
-                p.sendMessage("${ChatColor.RED}There are only 2 players left. In ten minutes, anyone not in the end will begin taking damage.")
+                p.sendMessage(MiniMessage.miniMessage().deserialize("<red>There are only 2 players left. In ten minutes, anyone not in the end will begin taking damage.</red>"))
             }
 
             // If last villager is a sheriff, remove their ability to kill
             shadow.gameState.currentRoles.forEach { (uuid, role) ->
                 if (role.roleFaction == PlayableFaction.VILLAGE && role == PlayableRole.SHERIFF) {
                     shadow.server.getPlayer(uuid)
-                        ?.sendMessage("${ChatColor.RED}You are the last villager alive. You will no longer have your instant kill ability.")
+                        ?.sendMessage(MiniMessage.miniMessage().deserialize("<red>You are the last villager alive. You will no longer have your instant kill ability.</red>"))
 
                     // Clear sheriff bow from inventory
                     shadow.server.getPlayer(uuid)?.inventory?.iterator()?.forEach { item ->
@@ -135,19 +163,15 @@ class GameEnd(var shadow: Shadow) {
                     return@Runnable
                 }
 
-                val color: ChatColor = when {
-                    seconds.get() % 2 == 0 -> ChatColor.RED
-                    else -> ChatColor.GOLD
+                val color: NamedTextColor = when {
+                    seconds.get() % 2 == 0 -> NamedTextColor.RED
+                    else -> NamedTextColor.GOLD
                 }
                 shadow.server.onlinePlayers.forEach { p ->
-                    p.spigot().sendMessage(
-                        ChatMessageType.ACTION_BAR, *arrayOf(
-                            net.md_5.bungee.api.chat.TextComponent(
-                                "${color}${minutes}:${
-                                    if (seconds.get() < 10) "0${seconds.get()}" else seconds.get()
-                                }"
-                            ),
-                        )
+                    Audience.audience(p).sendActionBar(
+                        Component.text(minutes.get().toString()).color(color)
+                            .append(Component.text(":").color(color))
+                            .append(Component.text(if(seconds.get() < 10) "0${seconds.get()}" else seconds.get().toString()).color(color))
                     )
                 }
 
@@ -182,16 +206,14 @@ class GameEnd(var shadow: Shadow) {
             }
 
             shadow.server.onlinePlayers.forEach { p ->
-                val color: ChatColor = when {
-                    alternatingColor.get() -> ChatColor.RED
-                    else -> ChatColor.GOLD
+                val color: NamedTextColor = when {
+                    alternatingColor.get() -> NamedTextColor.RED
+                    else -> NamedTextColor.GOLD
                 }
                 if (p.world.name == "world_the_end" || shadow.gameState.currentRoles[p.uniqueId]!!.roleFaction == PlayableFaction.SPECTATOR) return@forEach
 
-                p.spigot().sendMessage(
-                    ChatMessageType.ACTION_BAR, *arrayOf(
-                        net.md_5.bungee.api.chat.TextComponent("${color}You are now taking damage. Get to the end!"),
-                    )
+                Audience.audience(p).sendActionBar(
+                    MiniMessage.miniMessage().deserialize("<$color>You are now taking damage. Get to the end!</$color>")
                 )
 
                 if (alternatingColor.get()) {

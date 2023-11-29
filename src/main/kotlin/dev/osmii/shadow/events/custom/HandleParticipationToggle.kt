@@ -3,17 +3,14 @@ package dev.osmii.shadow.events.custom
 import dev.osmii.shadow.Shadow
 import dev.osmii.shadow.enums.Namespace
 import dev.osmii.shadow.util.ItemUtil
-import org.bukkit.ChatColor
-import org.bukkit.Material
+import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
-import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.ItemFlag
-import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
 class HandleParticipationToggle(var shadow: Shadow) : Listener {
@@ -30,11 +27,19 @@ class HandleParticipationToggle(var shadow: Shadow) : Listener {
         val participationToggle = event.item!!
         participationToggle.itemMeta = participationToggle.itemMeta?.apply {
             if (shadow.gameState.participationStatus[player.uniqueId]!!) {
-                this.setDisplayName("${ChatColor.GRAY}Participation: ${ChatColor.GREEN}Participating")
+                this.displayName(
+                    MiniMessage.miniMessage().deserialize(
+                        "<!i><reset><gray>Participation: <green>Participating</green></gray></!i>"
+                    )
+                )
                 this.addEnchant(Enchantment.DAMAGE_ALL, 1, true)
                 this.addItemFlags(ItemFlag.HIDE_ENCHANTS)
             } else {
-                this.setDisplayName("${ChatColor.GRAY}Participation: ${ChatColor.RED}Not Participating")
+                this.displayName(
+                    MiniMessage.miniMessage().deserialize(
+                        "<!i><gray>Participation: <red>Not Participating</red></gray></!i>"
+                    )
+                )
                 this.removeEnchant(Enchantment.DAMAGE_ALL)
             }
             this.persistentDataContainer.set(Namespace.FORBIDDEN, PersistentDataType.BYTE_ARRAY, ItemUtil.forbidden(drop=true, use=true, move=true))

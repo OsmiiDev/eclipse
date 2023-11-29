@@ -2,7 +2,7 @@ package dev.osmii.shadow.game.start
 
 import dev.osmii.shadow.Shadow
 import dev.osmii.shadow.enums.GamePhase
-import org.bukkit.ChatColor
+import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.EntityType
@@ -15,7 +15,10 @@ class P3SpawnEnderJesus(private var shadow: Shadow) {
         // Kill all other ender jesus
         shadow.server.worlds.forEach { world ->
             world.entities.forEach { entity ->
-                if (entity.type == EntityType.VILLAGER && entity.customName == "${ChatColor.GOLD}Ender Jesus") {
+                if (entity.type == EntityType.VILLAGER
+                    && entity.customName() != null
+                    && entity.customName()!! == MiniMessage.miniMessage().deserialize("<gold>Ender Jesus</gold>")
+                ) {
                     entity.remove()
                 }
             }
@@ -32,7 +35,7 @@ class P3SpawnEnderJesus(private var shadow: Shadow) {
         v.setGravity(false)
         v.isSilent = true
 
-        v.customName = "${ChatColor.GOLD}Ender Jesus"
+        v.customName(MiniMessage.miniMessage().deserialize("<gold>Ender Jesus</gold>"))
         v.isCustomNameVisible = true
 
         v.villagerType = Villager.Type.PLAINS
@@ -40,7 +43,7 @@ class P3SpawnEnderJesus(private var shadow: Shadow) {
         v.setAdult()
 
         val trades: ArrayList<MerchantRecipe> = ArrayList()
-        val recipe: MerchantRecipe = MerchantRecipe(ItemStack(Material.ENDER_EYE, 1), Integer.MAX_VALUE);
+        val recipe = MerchantRecipe(ItemStack(Material.ENDER_EYE, 1), Integer.MAX_VALUE)
         recipe.addIngredient(ItemStack(Material.NETHER_BRICKS, 1))
         trades.add(recipe)
 

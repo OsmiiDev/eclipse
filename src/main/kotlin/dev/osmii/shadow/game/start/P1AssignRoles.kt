@@ -3,27 +3,14 @@ package dev.osmii.shadow.game.start
 import dev.osmii.shadow.Shadow
 import dev.osmii.shadow.enums.GamePhase
 import dev.osmii.shadow.enums.PlayableRole
-import dev.osmii.shadow.util.ItemUtil
+import dev.osmii.shadow.util.TimeUtil
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.JoinConfiguration
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.title.Title
-import org.bukkit.ChatColor
 import org.bukkit.GameMode
-import org.bukkit.Location
-import org.bukkit.Material
-import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
-import org.bukkit.entity.Villager
-import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.MerchantRecipe
-import org.bukkit.inventory.meta.Damageable
-import org.bukkit.inventory.meta.PotionMeta
-import org.bukkit.persistence.PersistentDataType
-import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
-import java.time.Duration
 
 class P1AssignRoles(private var shadow: Shadow) {
     fun assignRoles() {
@@ -98,21 +85,21 @@ class P1AssignRoles(private var shadow: Shadow) {
                 Title.title(
                     MiniMessage.miniMessage().deserialize("<red>You are a Shadow.</red>"),
                     MiniMessage.miniMessage().deserialize("<red>Protect the dragon. Kill the villagers.</red>"),
-                    Title.Times.times(Duration.ofMillis(500), Duration.ofMillis(2000), Duration.ofSeconds(500))
+                    Title.Times.times(TimeUtil.ticks(10), TimeUtil.ticks(40), TimeUtil.ticks(10))
                 )
             )
             if (role == PlayableRole.SHERIFF) player.showTitle(
                 Title.title(
                     MiniMessage.miniMessage().deserialize("<gold>You are a Sheriff.</gold>"),
                     MiniMessage.miniMessage().deserialize("<gold>Find and kill the shadows.</gold>"),
-                    Title.Times.times(Duration.ofMillis(500), Duration.ofMillis(2000), Duration.ofSeconds(500))
+                    Title.Times.times(TimeUtil.ticks(10), TimeUtil.ticks(40), TimeUtil.ticks(10))
                 )
             )
             if (role == PlayableRole.VILLAGER) player.showTitle(
                 Title.title(
                     MiniMessage.miniMessage().deserialize("<green>You are a Villager.</green>"),
                     MiniMessage.miniMessage().deserialize("<green>Kill the dragon and stay alive.</green>"),
-                    Title.Times.times(Duration.ofMillis(500), Duration.ofMillis(2000), Duration.ofSeconds(500))
+                    Title.Times.times(TimeUtil.ticks(10), TimeUtil.ticks(40), TimeUtil.ticks(10))
                 )
             )
 
@@ -128,9 +115,8 @@ class P1AssignRoles(private var shadow: Shadow) {
                         .append(
                             Component.join(
                                 JoinConfiguration.separator(Component.text(", ").color(NamedTextColor.RED)),
-                                shadow.gameState.currentRoles.filter { (_, role) -> role == PlayableRole.SHADOW }.keys.map { uuid ->
-                                    Component.text(shadow.server.getPlayer(uuid)?.name!!)
-                                        .color(NamedTextColor.GOLD)
+                                shadow.gameState.currentRoles.filter { (_, role) -> role == PlayableRole.SHADOW }.keys.map {
+                                    Component.text(shadow.server.getPlayer(it)?.name!!).color(NamedTextColor.GOLD)
                                 }
                             )
                         )

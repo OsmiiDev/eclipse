@@ -3,11 +3,10 @@ package dev.osmii.shadow.events.custom
 import dev.osmii.shadow.Shadow
 import dev.osmii.shadow.enums.GamePhase
 import dev.osmii.shadow.enums.PlayableFaction
+import net.kyori.adventure.audience.Audience
+import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.bukkit.World
-import org.bukkit.event.EventHandler
-import org.bukkit.event.Listener
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
@@ -21,29 +20,23 @@ class HandleDayNight(var shadow: Shadow) {
             if (world?.time in 12452L..12532L) {
                 shadow.server.onlinePlayers.forEach { p ->
                     if (shadow.gameState.currentRoles[p.uniqueId]!!.roleFaction == PlayableFaction.SHADOW) {
-                        p.spigot().sendMessage(
-                            net.md_5.bungee.api.ChatMessageType.ACTION_BAR, *arrayOf(
-                                net.md_5.bungee.api.chat.TextComponent("${ChatColor.GREEN}Darkness approaches. Your powers grow."),
-                            )
+                        Audience.audience(p).sendMessage(
+                            MiniMessage.miniMessage().deserialize("<green>Darkness approaches. Your powers grow.</green>")
                         )
                     }
                     if (shadow.gameState.currentRoles[p.uniqueId]!!.roleFaction == PlayableFaction.VILLAGE ||
                         shadow.gameState.currentRoles[p.uniqueId]!!.roleFaction == PlayableFaction.NEUTRAL
                     ) {
-                        p.spigot().sendMessage(
-                            net.md_5.bungee.api.ChatMessageType.ACTION_BAR, *arrayOf(
-                                net.md_5.bungee.api.chat.TextComponent("${ChatColor.RED}Darkness approaches. It is now nighttime."),
-                            )
+                        Audience.audience(p).sendMessage(
+                            MiniMessage.miniMessage().deserialize("<red>Darkness approaches. It is now nighttime</red>")
                         )
                     }
                 }
             }
             if (world?.time in 0L..80L) {
                 shadow.server.onlinePlayers.forEach { p ->
-                    p.spigot().sendMessage(
-                        net.md_5.bungee.api.ChatMessageType.ACTION_BAR, *arrayOf(
-                            net.md_5.bungee.api.chat.TextComponent("${ChatColor.GREEN}The sky clears."),
-                        )
+                    Audience.audience(p).sendMessage(
+                        MiniMessage.miniMessage().deserialize("<green>The sky clears.</green>")
                     )
                 }
             }

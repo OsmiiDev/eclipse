@@ -6,8 +6,7 @@ import dev.osmii.shadow.enums.PlayableRole
 import dev.osmii.shadow.util.ItemUtil
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextColor
-import org.bukkit.ChatColor
+import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
@@ -33,7 +32,7 @@ class P2GiveItems(private var shadow: Shadow) {
             if (role == PlayableRole.SHADOW) {
                 val strength = ItemStack(Material.POTION, 1)
                 strength.itemMeta = (strength.itemMeta as PotionMeta).apply {
-                    this.displayName(Component.text("Potion of Strength").color(TextColor.color(0xf72362)))
+                    this.displayName(MiniMessage.miniMessage().deserialize("<!i><red>Potion of Strength</red></!i>"))
                     this.lore(listOf(
                         Component.text("Use only when needed... you could be found out").color(NamedTextColor.GRAY)
                     ))
@@ -59,7 +58,7 @@ class P2GiveItems(private var shadow: Shadow) {
             if (role == PlayableRole.SHERIFF) {
                 val bow = ItemStack(Material.BOW, 1)
                 bow.itemMeta = (bow.itemMeta!! as Damageable).apply {
-                    this.displayName(Component.text("Sheriff's Bow").color(NamedTextColor.GOLD))
+                    this.displayName(MiniMessage.miniMessage().deserialize("<!i><gold>Sheriff's Bow</gold></!i"))
                     this.isUnbreakable = true
                     this.addEnchant(Enchantment.ARROW_DAMAGE, 1, true)
                     this.addItemFlags(ItemFlag.HIDE_ENCHANTS)
@@ -73,11 +72,11 @@ class P2GiveItems(private var shadow: Shadow) {
                 player.inventory.setItem(9, bow)
             }
 
-            val abilitySelector: ItemStack = ItemStack(Material.NETHER_STAR, 1)
+            val abilitySelector = ItemStack(Material.NETHER_STAR, 1)
             abilitySelector.itemMeta = abilitySelector.itemMeta.apply {
                 if (this == null) return@apply
 
-                this.displayName(Component.text("Ability Selector").color(NamedTextColor.GOLD))
+                this.displayName(MiniMessage.miniMessage().deserialize("<!i><gold>Ability Selector</gold></!i>"))
 
                 this.persistentDataContainer.set(
                     Namespace.FORBIDDEN,
@@ -86,6 +85,7 @@ class P2GiveItems(private var shadow: Shadow) {
                 )
                 this.persistentDataContainer.set(Namespace.CUSTOM_ID, PersistentDataType.STRING, "ability-selector")
             }
+            player.inventory.setItem(8, abilitySelector)
         }
 
         P3SpawnEnderJesus(shadow).spawnEnderJesus()

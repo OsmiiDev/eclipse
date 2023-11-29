@@ -12,7 +12,7 @@ class L0ResetStates(private var shadow: Shadow) {
         shadow.server.getWorld("world")?.isThundering = false
         shadow.server.onlinePlayers.forEach { player ->
             // Reset player data
-            player.gameMode = GameMode.ADVENTURE;
+            player.gameMode = GameMode.ADVENTURE
             player.health = 20.0
             player.foodLevel = 20
             player.saturation = 20.0f

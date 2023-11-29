@@ -1,14 +1,11 @@
 package dev.osmii.shadow.events.game
 
 import com.comphenix.protocol.PacketType
-import com.comphenix.protocol.events.AbstractStructure
 import com.comphenix.protocol.events.ListenerPriority
 import com.comphenix.protocol.events.PacketAdapter
 import com.comphenix.protocol.events.PacketEvent
 import com.comphenix.protocol.wrappers.EnumWrappers
-import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot
 import dev.osmii.shadow.Shadow
-import org.bukkit.inventory.ItemStack
 
 class PacketHideItemSwitch(val shadow: Shadow) : PacketAdapter(
     shadow,

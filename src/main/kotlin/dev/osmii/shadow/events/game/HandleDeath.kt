@@ -7,7 +7,6 @@ import dev.osmii.shadow.enums.PlayableRole
 import dev.osmii.shadow.game.end.GameEnd
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
-import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
@@ -17,7 +16,6 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerRespawnEvent
-import javax.inject.Named
 
 class HandleDeath(private var shadow: Shadow) : Listener {
 
@@ -53,13 +51,13 @@ class HandleDeath(private var shadow: Shadow) : Listener {
             )
             if (shadow.gameState.currentRoles[p.uniqueId] == PlayableRole.SHADOW) {
                 player.sendMessage(
-                    Component.text("There are")
+                    Component.text("There are ")
                         .color(NamedTextColor.RED)
                         .append(
-                            Component.text(" ${shadow.gameState.currentRoles.filter { (_, role) -> role == PlayableRole.SHADOW }.size - 1}")
+                            Component.text("${shadow.gameState.currentRoles.filter { (_, role) -> role == PlayableRole.SHADOW }.size - 1} ")
                                 .color(NamedTextColor.GOLD)
                         )
-                        .append(Component.text(" shadows remaining.").color(NamedTextColor.RED))
+                        .append(Component.text("shadows remaining.").color(NamedTextColor.RED))
                 )
             }
         }
@@ -93,12 +91,12 @@ class HandleDeath(private var shadow: Shadow) : Listener {
         if (shadow.gameState.currentRoles[e.entity.uniqueId]?.roleFaction != PlayableFaction.VILLAGE) return
 
         shadow.server.broadcast(
-            MiniMessage.miniMessage().deserialize("<gold>A Sheriff, ${p.name}, has killed an innocent villager. They will be executed for their crimes.<gold>")
+            MiniMessage.miniMessage().deserialize("<gold>A Sheriff, ${p.name}, has killed an innocent villager. They will be executed for their crimes.</gold>")
         )
 
         Bukkit.getScheduler().runTaskLater(shadow, Runnable {
             p.world.strikeLightningEffect(p.location)
-            p.damage(99999.9);
+            p.damage(99999.9)
         }, 20)
     }
 }

@@ -3,20 +3,17 @@ package dev.osmii.shadow.events
 import dev.osmii.shadow.Shadow
 import dev.osmii.shadow.enums.Namespace
 import org.bukkit.Material
-import org.bukkit.NamespacedKey
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCreativeEvent
 import org.bukkit.event.inventory.InventoryDragEvent
-import org.bukkit.event.inventory.InventoryInteractEvent
 import org.bukkit.event.inventory.InventoryMoveItemEvent
 import org.bukkit.event.player.PlayerDropItemEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
-import java.util.Objects
 
 class HandleItemInteractionRestrict(private val shadow: Shadow) : Listener {
 
@@ -97,7 +94,7 @@ class HandleItemInteractionRestrict(private val shadow: Shadow) : Listener {
 
     @EventHandler
     fun onForbiddenItemMove(e: InventoryClickEvent) {
-        if (e.currentItem == null) return;
+        if (e.currentItem == null) return
         if (e.currentItem?.itemMeta?.persistentDataContainer?.has(
                 Namespace.FORBIDDEN,
                 PersistentDataType.BYTE_ARRAY
@@ -133,7 +130,7 @@ class HandleItemInteractionRestrict(private val shadow: Shadow) : Listener {
 
     @EventHandler
     fun onForbiddenItemMove(e: InventoryCreativeEvent) {
-        if (e.currentItem == null) return;
+        if (e.currentItem == null) return
         if (e.currentItem?.itemMeta?.persistentDataContainer?.has(
                 Namespace.FORBIDDEN,
                 PersistentDataType.BYTE_ARRAY

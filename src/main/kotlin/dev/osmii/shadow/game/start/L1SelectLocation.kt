@@ -39,6 +39,6 @@ class L1SelectLocation(private var shadow: Shadow) {
         }
 
         // Finish phase
-        shadow.gameState.currentPhase = GamePhase.LOCATION_SELECTED;
+        shadow.gameState.currentPhase = GamePhase.LOCATION_SELECTED
     }
 }

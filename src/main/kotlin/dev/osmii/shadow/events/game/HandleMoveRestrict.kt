@@ -12,7 +12,7 @@ class HandleMoveRestrict(var shadow: Shadow) : Listener {
     @EventHandler
     fun onMove(e: PlayerMoveEvent) {
         if (e.player.isOp) return
-        if (e.from.x == e.to?.x && e.from.y == e.to?.y && e.from.z == e.to?.z) return
+        if (e.from.x == e.to.x && e.from.y == e.to.y && e.from.z == e.to.z) return
         if (shadow.gameState.currentPhase == GamePhase.LOCATION_SELECTED) e.isCancelled = true
     }
 

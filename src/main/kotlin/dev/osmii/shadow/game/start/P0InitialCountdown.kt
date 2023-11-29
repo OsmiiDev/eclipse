@@ -4,19 +4,18 @@ import dev.osmii.shadow.Shadow
 import dev.osmii.shadow.enums.GamePhase
 import dev.osmii.shadow.enums.Namespace
 import dev.osmii.shadow.util.ItemUtil
+import dev.osmii.shadow.util.TimeUtil
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.title.Title
-import net.md_5.bungee.api.chat.BaseComponent
-import org.bukkit.*
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer
+import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitTask
-import java.time.Duration
 import java.util.concurrent.atomic.AtomicInteger
 
 class P0InitialCountdown(private var shadow: Shadow) {
@@ -38,12 +37,12 @@ class P0InitialCountdown(private var shadow: Shadow) {
                 this.addItemFlags(ItemFlag.HIDE_ENCHANTS)
                 if (shadow.gameState.participationStatus[player.uniqueId]!!) {
                     this.displayName(
-                        MiniMessage.miniMessage().deserialize("<gray>Participation: <green>Participating</green></gray>")
+                        MiniMessage.miniMessage().deserialize("<!i><gray>Participation: <green>Participating</green></gray></!i>")
                     )
                     this.addEnchant(Enchantment.DAMAGE_ALL, 1, true)
                 } else {
                     this.displayName(
-                        MiniMessage.miniMessage().deserialize("<gray>Participation: <red>Not Participating</red></gray>")
+                        MiniMessage.miniMessage().deserialize("<!i><reset><gray>Participation: <red>Not Participating</red></gray></!i>")
                     )
                 }
 
@@ -73,7 +72,7 @@ class P0InitialCountdown(private var shadow: Shadow) {
                         Component.text("${secsLeft.get()}")
                             .color(color),
                         Component.empty(),
-                        Title.Times.times(Duration.ofMillis(0), Duration.ofMillis(1100), Duration.ofMillis(0))
+                        Title.Times.times(TimeUtil.ticks(0), TimeUtil.ticks(22), TimeUtil.ticks(0))
                     )
                 )
             }
@@ -85,7 +84,7 @@ class P0InitialCountdown(private var shadow: Shadow) {
         Bukkit.getScheduler().runTaskLater(shadow, Runnable {
             task.cancel()
 
-            shadow.server.onlinePlayers.forEach() { player ->
+            shadow.server.onlinePlayers.forEach { player ->
                 player.inventory.clear()
             }
 
