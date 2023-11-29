@@ -18,7 +18,7 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
-class P2GiveItems(private var shadow: Shadow) {
+class P2GiveItems(private val shadow: Shadow) {
     fun giveItems() {
         shadow.gameState.currentRoles.forEach { (uuid, role) ->
             val player: Player? = shadow.server.getPlayer(uuid)
@@ -58,7 +58,7 @@ class P2GiveItems(private var shadow: Shadow) {
             if (role == PlayableRole.SHERIFF) {
                 val bow = ItemStack(Material.BOW, 1)
                 bow.itemMeta = (bow.itemMeta!! as Damageable).apply {
-                    this.displayName(MiniMessage.miniMessage().deserialize("<!i><gold>Sheriff's Bow</gold></!i"))
+                    this.displayName(MiniMessage.miniMessage().deserialize("<!i><gold>Sheriff's Bow</gold></!i>"))
                     this.isUnbreakable = true
                     this.addEnchant(Enchantment.ARROW_DAMAGE, 1, true)
                     this.addItemFlags(ItemFlag.HIDE_ENCHANTS)
@@ -83,7 +83,7 @@ class P2GiveItems(private var shadow: Shadow) {
                     PersistentDataType.BYTE_ARRAY,
                     ItemUtil.forbidden(drop = true, use = false, move = true, moveContainer = true)
                 )
-                this.persistentDataContainer.set(Namespace.CUSTOM_ID, PersistentDataType.STRING, "ability-selector")
+                this.persistentDataContainer.set(Namespace.CUSTOM_ID, PersistentDataType.STRING, "ability-select")
             }
             player.inventory.setItem(8, abilitySelector)
         }

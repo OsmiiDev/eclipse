@@ -13,23 +13,23 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.persistence.PersistentDataType
 
-class HandleParticipationToggle(var shadow: Shadow) : Listener {
+class HandleParticipationToggle(val shadow: Shadow) : Listener {
     @EventHandler(priority = EventPriority.HIGH)
-    fun onPlayerInteract(event: PlayerInteractEvent) {
-        if (event.item == null || event.item?.itemMeta == null) return
-        if (!event.item?.itemMeta?.persistentDataContainer?.getOrDefault(Namespace.CUSTOM_ID, PersistentDataType.STRING, "").equals("participation-toggle")) return
-        if (event.action != Action.RIGHT_CLICK_AIR && event.action != Action.RIGHT_CLICK_BLOCK) return
+    fun onPlayerInteract(e: PlayerInteractEvent) {
+        if (e.item == null) return
+        if (!ItemUtil.customIdIs(e.item!!, "participation-toggle")) return
+        if (e.action != Action.RIGHT_CLICK_AIR && e.action != Action.RIGHT_CLICK_BLOCK) return
 
-        val player = event.player
+        val player = e.player
         val participationStatus = shadow.gameState.participationStatus[player.uniqueId] ?: return
 
         shadow.gameState.participationStatus[player.uniqueId] = !participationStatus
-        val participationToggle = event.item!!
+        val participationToggle = e.item!!
         participationToggle.itemMeta = participationToggle.itemMeta?.apply {
             if (shadow.gameState.participationStatus[player.uniqueId]!!) {
                 this.displayName(
                     MiniMessage.miniMessage().deserialize(
-                        "<!i><reset><gray>Participation: <green>Participating</green></gray></!i>"
+                        "<!i><gray>Participation: <green>Participating</green></gray></!i>"
                     )
                 )
                 this.addEnchant(Enchantment.DAMAGE_ALL, 1, true)
@@ -42,7 +42,11 @@ class HandleParticipationToggle(var shadow: Shadow) : Listener {
                 )
                 this.removeEnchant(Enchantment.DAMAGE_ALL)
             }
-            this.persistentDataContainer.set(Namespace.FORBIDDEN, PersistentDataType.BYTE_ARRAY, ItemUtil.forbidden(drop=true, use=true, move=true))
+            this.persistentDataContainer.set(
+                Namespace.FORBIDDEN,
+                PersistentDataType.BYTE_ARRAY,
+                ItemUtil.forbidden(drop = true, use = true, move = true)
+            )
             this.persistentDataContainer.set(Namespace.CUSTOM_ID, PersistentDataType.STRING, "participation-toggle")
         }
     }

@@ -22,7 +22,7 @@ import org.bukkit.persistence.PersistentDataType
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 
-class HandleShadowGuessSheriff(var shadow: Shadow) : Listener {
+class HandleShadowGuessSheriff(val shadow: Shadow) : Listener {
 
     private var guesses: HashMap<Player, Player> = HashMap()
     private var pages = HashMap<Player, Int>()

@@ -18,7 +18,7 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitTask
 import java.util.concurrent.atomic.AtomicInteger
 
-class P0InitialCountdown(private var shadow: Shadow) {
+class P0InitialCountdown(private val shadow: Shadow) {
     fun startCountdown() {
         shadow.gameState.currentRoles.clear()
         shadow.gameState.currentWinners.clear()

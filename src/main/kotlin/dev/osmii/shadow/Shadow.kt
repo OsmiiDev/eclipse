@@ -7,8 +7,10 @@ import dev.osmii.shadow.commands.*
 import dev.osmii.shadow.enums.GamePhase
 import dev.osmii.shadow.enums.PlayableRole
 import dev.osmii.shadow.events.*
+import dev.osmii.shadow.events.custom.HandleAddRole
 import dev.osmii.shadow.events.custom.HandleDayNight
 import dev.osmii.shadow.events.custom.HandleParticipationToggle
+import dev.osmii.shadow.events.custom.abilities.HandleOpenAbilityMenu
 import dev.osmii.shadow.events.custom.abilities.shadow.HandleShadowGuessSheriff
 import dev.osmii.shadow.events.custom.abilities.sheriff.HandleSheriffBow
 import dev.osmii.shadow.events.game.*
@@ -32,18 +34,24 @@ class Shadow : JavaPlugin() {
         Companion.logger!!.info("Enabling Shadow")
 
         // Register events
-        Bukkit.getPluginManager().registerEvents(HandleDeath(this), this)
-        Bukkit.getPluginManager().registerEvents(HandleMoveRestrict(this), this)
-        Bukkit.getPluginManager().registerEvents(HandleChat(this), this)
+        HandleDayNight(this).register()
+
         Bukkit.getPluginManager().registerEvents(HandleItemInteractionRestrict(this), this)
+        Bukkit.getPluginManager().registerEvents(HandleChat(this), this)
+        Bukkit.getPluginManager().registerEvents(HandleDeath(this), this)
         Bukkit.getPluginManager().registerEvents(HandleJoinLeave(this), this)
+        Bukkit.getPluginManager().registerEvents(HandleMoveRestrict(this), this)
+
+        Bukkit.getPluginManager().registerEvents(HandleSheriffBow(this), this)
 
         Bukkit.getPluginManager().registerEvents(HandleParticipationToggle(this), this)
-        Bukkit.getPluginManager().registerEvents(HandleSheriffBow(this), this)
+        Bukkit.getPluginManager().registerEvents(HandleAddRole(this), this)
+        Bukkit.getPluginManager().registerEvents(HandleOpenAbilityMenu(this), this)
+
         Bukkit.getPluginManager().registerEvents(HandleShadowGuessSheriff(this), this)
 
         pm!!.addPacketListener(PacketHideItemSwitch(this))
-        HandleDayNight(this).register()
+
         // Register commands
         getCommand("\$roles")!!.setExecutor(CommandRoles(this))
         getCommand("\$location")!!.setExecutor(CommandLocation(this))

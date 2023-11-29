@@ -7,7 +7,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.player.PlayerMoveEvent
 
-class HandleMoveRestrict(var shadow: Shadow) : Listener {
+class HandleMoveRestrict(val shadow: Shadow) : Listener {
     // Handle interaction restrictions during the phase between location selection and game start
     @EventHandler
     fun onMove(e: PlayerMoveEvent) {

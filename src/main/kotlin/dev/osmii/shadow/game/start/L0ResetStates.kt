@@ -4,7 +4,7 @@ import dev.osmii.shadow.Shadow
 import org.bukkit.GameMode
 import org.bukkit.advancement.AdvancementProgress
 
-class L0ResetStates(private var shadow: Shadow) {
+class L0ResetStates(private val shadow: Shadow) {
     fun resetStates() {
         shadow.server.getWorld("world")?.time = 0
         shadow.server.getWorld("world")?.fullTime = 0

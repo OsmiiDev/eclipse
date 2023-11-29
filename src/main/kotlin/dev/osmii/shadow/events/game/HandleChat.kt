@@ -3,8 +3,11 @@ package dev.osmii.shadow.events.game
 import dev.osmii.shadow.Shadow
 import dev.osmii.shadow.enums.GamePhase
 import dev.osmii.shadow.enums.PlayableRole
+import io.papermc.paper.chat.ChatRenderer
 import io.papermc.paper.event.player.AsyncChatEvent
+import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.entity.Player
@@ -12,17 +15,22 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import kotlin.math.ceil
 
-class HandleChat (private var shadow: Shadow) : Listener {
+class Renderer: ChatRenderer {
+    override fun render(source: Player, sourceDisplayName: Component, message: Component, viewer: Audience): Component {
+        return MiniMessage.miniMessage().deserialize(
+            "<white>${(source.displayName() as TextComponent).content()} » </white><gray>${(message as TextComponent).content()}</gray>"
+        )
+    }
+
+}
+class HandleChat (private val shadow: Shadow) : Listener {
 
     private var lastChat: HashMap<Player, Double>  = HashMap()
 
     @EventHandler
     fun onChat(e: AsyncChatEvent) {
-        e.message(
-            MiniMessage.miniMessage().deserialize(
-                "<white>${e.player.name} » </white><gray>${e.originalMessage()}</gray>"
-            )
-        )
+        e.renderer(Renderer())
+
         if(shadow.gameState.currentPhase != GamePhase.GAME_IN_PROGRESS) return
         if(e.player.isOp) return
 

@@ -1,19 +1,20 @@
 package dev.osmii.shadow.enums
 
-import org.bukkit.ChatColor
+import net.kyori.adventure.text.format.NamedTextColor
+import org.bukkit.Material
 
 enum class PlayableSubfaction(
     val parentFaction: PlayableFaction,
-    val color: ChatColor
+    val factionIcon: Material,
+    val color: NamedTextColor
 ) {
-    VILLAGE_INVESTIGATIVE(PlayableFaction.VILLAGE, ChatColor.GREEN),
-    VILLAGE_PROTECTIVE(PlayableFaction.VILLAGE, ChatColor.DARK_AQUA),
-    VILLAGE_KILLING(PlayableFaction.VILLAGE, ChatColor.GOLD),
-    VILLAGE_SUPPORT(PlayableFaction.VILLAGE, ChatColor.LIGHT_PURPLE),
-    VILLAGE(PlayableFaction.VILLAGE, ChatColor.GREEN),
+    VILLAGE_INVESTIGATIVE(PlayableFaction.VILLAGE, Material.BRUSH, NamedTextColor.GREEN),
+    VILLAGE_PROTECTIVE(PlayableFaction.VILLAGE, Material.SHIELD, NamedTextColor.DARK_AQUA),
+    VILLAGE_KILLING(PlayableFaction.VILLAGE, Material.IRON_SWORD, NamedTextColor.GOLD),
+    VILLAGE_SUPPORT(PlayableFaction.VILLAGE, Material.IRON_PICKAXE, NamedTextColor.LIGHT_PURPLE),
 
-    SHADOW_KILLING(PlayableFaction.SHADOW, ChatColor.RED),
-    SHADOW_DECEPTION(PlayableFaction.SHADOW, ChatColor.RED),
+    SHADOW_KILLING(PlayableFaction.SHADOW, Material.NETHERITE_AXE, NamedTextColor.RED),
+    SHADOW_DECEPTION(PlayableFaction.SHADOW, Material.ECHO_SHARD, NamedTextColor.RED),
 
-    SPECTATOR(PlayableFaction.SPECTATOR, ChatColor.GRAY)
+    SPECTATOR(PlayableFaction.SPECTATOR, Material.BARRIER, NamedTextColor.GRAY)
 }

@@ -10,7 +10,7 @@ import org.bukkit.World
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
-class HandleDayNight(var shadow: Shadow) {
+class HandleDayNight(val shadow: Shadow) {
 
     fun register() {
         val world: World? = Bukkit.getWorld("world")
@@ -27,7 +27,7 @@ class HandleDayNight(var shadow: Shadow) {
                     if (shadow.gameState.currentRoles[p.uniqueId]!!.roleFaction == PlayableFaction.VILLAGE ||
                         shadow.gameState.currentRoles[p.uniqueId]!!.roleFaction == PlayableFaction.NEUTRAL
                     ) {
-                        Audience.audience(p).sendMessage(
+                        Audience.audience(p).sendActionBar(
                             MiniMessage.miniMessage().deserialize("<red>Darkness approaches. It is now nighttime</red>")
                         )
                     }
@@ -35,7 +35,7 @@ class HandleDayNight(var shadow: Shadow) {
             }
             if (world?.time in 0L..80L) {
                 shadow.server.onlinePlayers.forEach { p ->
-                    Audience.audience(p).sendMessage(
+                    Audience.audience(p).sendActionBar(
                         MiniMessage.miniMessage().deserialize("<green>The sky clears.</green>")
                     )
                 }
@@ -47,7 +47,7 @@ class HandleDayNight(var shadow: Shadow) {
                     if (shadow.gameState.currentRoles[p.uniqueId]!!.roleFaction == PlayableFaction.VILLAGE) {
                         p.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 40, 1, false, false))
                         p.addPotionEffect(PotionEffect(PotionEffectType.DARKNESS, 40, 0, false, false))
-                        p.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 40, 1, false, false))
+                        p.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 40, 0, false, false))
                     }
                 }
             } else {

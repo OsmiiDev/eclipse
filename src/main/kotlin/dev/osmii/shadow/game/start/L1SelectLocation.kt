@@ -9,16 +9,18 @@ import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin
 
-class L1SelectLocation(private var shadow: Shadow) {
+class L1SelectLocation(private val shadow: Shadow) {
     fun selectLocation(location: Location) {
         val world = Objects.requireNonNull(shadow.server.getWorld("world"))
         world!!.worldBorder.center = location
         world.worldBorder.size = 135.0
         world.setSpawnLocation(location)
 
-        if(shadow.server.onlinePlayers.size < 4) {
+        if(shadow.server.onlinePlayers.size < shadow.gameState.originalRolelist.roles.size) {
             shadow.server.broadcast(
-                MiniMessage.miniMessage().deserialize("<red>Failed to start game. Not enough participating players!</red>")
+                MiniMessage.miniMessage().deserialize(
+                    "<red>Failed to start game. Not enough online players!</red> <gold>(${shadow.server.onlinePlayers.size}/${shadow.gameState.originalRolelist.roles.size})</gold>"
+                )
             )
             shadow.gameState.currentPhase = GamePhase.IN_BETWEEN_ROUND
             return

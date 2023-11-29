@@ -10,7 +10,7 @@ import org.bukkit.entity.Villager
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.MerchantRecipe
 
-class P3SpawnEnderJesus(private var shadow: Shadow) {
+class P3SpawnEnderJesus(private val shadow: Shadow) {
     fun spawnEnderJesus() {
         // Kill all other ender jesus
         shadow.server.worlds.forEach { world ->

@@ -2,6 +2,7 @@ package dev.osmii.shadow.events.custom.abilities.sheriff
 
 import dev.osmii.shadow.Shadow
 import dev.osmii.shadow.enums.Namespace
+import dev.osmii.shadow.util.ItemUtil
 import org.bukkit.Sound
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Player
@@ -12,15 +13,15 @@ import org.bukkit.event.entity.EntityShootBowEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
-class HandleSheriffBow(var shadow: Shadow) : Listener {
+class HandleSheriffBow(val shadow: Shadow) : Listener {
 
     private var sheriffArrows: HashMap<Int, ItemStack> = HashMap()
     private var sheriffs: HashMap<Int, Player> = HashMap()
 
     @EventHandler
     fun onShoot(e: EntityShootBowEvent) {
-        if (e.bow?.itemMeta == null || !e.bow?.itemMeta?.persistentDataContainer?.has(Namespace.CUSTOM_ID, PersistentDataType.STRING)!!) return
-        if (!e.bow?.itemMeta?.persistentDataContainer?.get(Namespace.CUSTOM_ID, PersistentDataType.STRING).equals("sheriff-bow")) return
+        if (e.bow == null) return
+        if (!ItemUtil.customIdIs(e.bow!!, "sheriff-bow")) return
         if (e.entity !is Player) return
 
         e.projectile.isGlowing = true

@@ -17,7 +17,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 
-class HandleDeath(private var shadow: Shadow) : Listener {
+class HandleDeath(private val shadow: Shadow) : Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     fun onPlayerDeath(e: PlayerDeathEvent) {
@@ -28,19 +28,8 @@ class HandleDeath(private var shadow: Shadow) : Listener {
 
         // Choose color and role
         val p = e.entity
-        val color = when (shadow.gameState.currentRoles[p.uniqueId]) {
-            PlayableRole.VILLAGER -> NamedTextColor.GREEN
-            PlayableRole.SHERIFF -> NamedTextColor.GOLD
-            PlayableRole.SHADOW -> NamedTextColor.RED
-            else -> null
-        }
-        val message: String? = when (shadow.gameState.currentRoles[p.uniqueId]) {
-            PlayableRole.VILLAGER -> "Villager"
-            PlayableRole.SHERIFF -> "Sheriff"
-            PlayableRole.SHADOW -> "Shadow"
-            else -> null
-        }
-        if (color == null) return
+        val color = shadow.gameState.currentRoles[p.uniqueId]?.roleColor
+        val message = shadow.gameState.currentRoles[p.uniqueId]?.roleName
         for (player in shadow.server.onlinePlayers) {
             player.playSound(player.location, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1f, 1f)
             player.sendMessage(
@@ -49,12 +38,12 @@ class HandleDeath(private var shadow: Shadow) : Listener {
                     .append(Component.text(message.toString()).color(color))
                     .append(Component.text("."))
             )
-            if (shadow.gameState.currentRoles[p.uniqueId] == PlayableRole.SHADOW) {
+            if (shadow.gameState.currentRoles[p.uniqueId]?.roleFaction == PlayableFaction.SHADOW) {
                 player.sendMessage(
                     Component.text("There are ")
                         .color(NamedTextColor.RED)
                         .append(
-                            Component.text("${shadow.gameState.currentRoles.filter { (_, role) -> role == PlayableRole.SHADOW }.size - 1} ")
+                            Component.text("${shadow.gameState.currentRoles.filter { (_, role) -> role.roleFaction == PlayableFaction.SHADOW }.size - 1} ")
                                 .color(NamedTextColor.GOLD)
                         )
                         .append(Component.text("shadows remaining.").color(NamedTextColor.RED))

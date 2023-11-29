@@ -9,7 +9,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 
-class HandleJoinLeave(private var shadow: Shadow) : Listener {
+class HandleJoinLeave(private val shadow: Shadow) : Listener {
     // Handle players joining and leaving the server during the game
     @EventHandler
     fun onJoin(e: PlayerJoinEvent) {

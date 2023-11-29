@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.sqrt
 
-class GameEnd(var shadow: Shadow) {
+class GameEnd(val shadow: Shadow) {
 
     private var timerTask = AtomicReference<BukkitTask>()
     private var antiStallTask = AtomicReference<BukkitTask>()
