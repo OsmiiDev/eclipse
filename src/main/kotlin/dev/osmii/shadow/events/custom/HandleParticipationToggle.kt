@@ -1,6 +1,7 @@
 package dev.osmii.shadow.events.custom
 
 import dev.osmii.shadow.Shadow
+import dev.osmii.shadow.enums.CID
 import dev.osmii.shadow.enums.Namespace
 import dev.osmii.shadow.util.ItemUtil
 import net.kyori.adventure.text.minimessage.MiniMessage
@@ -17,7 +18,7 @@ class HandleParticipationToggle(val shadow: Shadow) : Listener {
     @EventHandler(priority = EventPriority.HIGH)
     fun onPlayerInteract(e: PlayerInteractEvent) {
         if (e.item == null) return
-        if (!ItemUtil.customIdIs(e.item!!, "participation-toggle")) return
+        if (!ItemUtil.customIdIs(e.item!!, CID.HOTBAR_PARTICIPATION_SELECT)) return
         if (e.action != Action.RIGHT_CLICK_AIR && e.action != Action.RIGHT_CLICK_BLOCK) return
 
         val player = e.player

@@ -18,7 +18,7 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 
 class HandleDeath(private val shadow: Shadow) : Listener {
-
+    // Handles player deaths and sheriff misfires
     @EventHandler(priority = EventPriority.LOW)
     fun onPlayerDeath(e: PlayerDeathEvent) {
         if (shadow.gameState.currentPhase != GamePhase.GAME_IN_PROGRESS) return

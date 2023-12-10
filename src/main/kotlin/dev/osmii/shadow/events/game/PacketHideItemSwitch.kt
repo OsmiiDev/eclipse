@@ -6,6 +6,7 @@ import com.comphenix.protocol.events.PacketAdapter
 import com.comphenix.protocol.events.PacketEvent
 import com.comphenix.protocol.wrappers.EnumWrappers
 import dev.osmii.shadow.Shadow
+import dev.osmii.shadow.enums.CID
 import dev.osmii.shadow.enums.Namespace
 import org.bukkit.persistence.PersistentDataType
 
@@ -27,7 +28,7 @@ class PacketHideItemSwitch(val shadow: Shadow) : PacketAdapter(
 
         item.itemMeta?.persistentDataContainer?.get(Namespace.CUSTOM_ID, PersistentDataType.STRING)?.let {
             shadow.logger.info("Found custom id $it")
-            if(it == "ability-select") {
+            if(it == CID.HOTBAR_ABILITY_SELECT) {
                 e.isCancelled = true
             }
         }

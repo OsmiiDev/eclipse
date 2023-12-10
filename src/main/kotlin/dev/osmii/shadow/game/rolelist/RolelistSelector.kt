@@ -9,17 +9,25 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextDecoration
 import java.util.*
 
-class RolelistSelector {
+class RolelistSelector : Comparable<RolelistSelector> {
 
     val roles = ArrayList<PlayableRole>()
     val mutableRoles = ArrayList<PlayableRole>()
     var specificity = 0
     var selectorText: Component? = null
 
+    private var faction: PlayableFaction? = null
+    private var subfaction: PlayableSubfaction? = null
+    var role: PlayableRole? = null
+
     constructor(e: PlayableRole) {
         roles.add(e)
         selectorText = Component.text(e.roleName).color(e.roleColor).decoration(TextDecoration.ITALIC, false)
         specificity = 3
+
+        faction = e.roleFaction
+        subfaction = e.roleSubfaction
+        role = e
     }
 
     constructor(e: PlayableSubfaction) {
@@ -36,6 +44,9 @@ class RolelistSelector {
         selectorText = Component.text(left).color(e.color)
             .append(Component.text(right).color(NamedTextColor.BLUE))
         specificity = 2
+
+        faction = e.parentFaction
+        subfaction = e
     }
 
     constructor(e: PlayableFaction) {
@@ -52,6 +63,8 @@ class RolelistSelector {
                     .color(e.color)
             )
         specificity = 1
+
+        faction = e
     }
 
     constructor(e: String) {
@@ -83,6 +96,23 @@ class RolelistSelector {
     fun copyToMutableRoles() {
         mutableRoles.clear()
         mutableRoles.addAll(roles)
+    }
+
+    override fun compareTo(other: RolelistSelector): Int {
+        if (specificity > other.specificity) return 1
+        if (specificity < other.specificity) return -1
+
+        if (faction != null && other.faction != null) {
+            if (faction!!.ordinal > other.faction!!.ordinal) return 1
+            if (faction!!.ordinal < other.faction!!.ordinal) return -1
+        }
+        else if (faction != null) return 1
+        else if (other.faction != null) return -1
+
+        if (roles.size > other.roles.size) return 1
+        if (roles.size < other.roles.size) return -1
+
+        return 0
     }
 
     override fun toString(): String {

@@ -8,8 +8,7 @@ import dev.osmii.shadow.events.custom.HandleAddRole
 import dev.osmii.shadow.events.custom.HandleDayNight
 import dev.osmii.shadow.events.custom.HandleParticipationToggle
 import dev.osmii.shadow.events.custom.abilities.HandleOpenAbilityMenu
-import dev.osmii.shadow.events.custom.abilities.shadow.HandleShadowGuessSheriff
-import dev.osmii.shadow.events.custom.abilities.sheriff.HandleSheriffBow
+import dev.osmii.shadow.events.custom.abilities.item.sheriff.HandleSheriffBow
 import dev.osmii.shadow.events.game.*
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
@@ -18,10 +17,10 @@ import java.util.logging.Logger
 
 class Shadow : JavaPlugin() {
     var gameState: ShadowGameState = ShadowGameState()
-    private var pm: ProtocolManager? = null
+    var protocolManager: ProtocolManager? = null
 
     override fun onEnable() {
-        pm = ProtocolLibrary.getProtocolManager()
+        protocolManager = ProtocolLibrary.getProtocolManager()
 
         Companion.logger = logger
         Companion.logger!!.info("Enabling Shadow")
@@ -41,9 +40,7 @@ class Shadow : JavaPlugin() {
         Bukkit.getPluginManager().registerEvents(HandleAddRole(this), this)
         Bukkit.getPluginManager().registerEvents(HandleOpenAbilityMenu(this), this)
 
-        Bukkit.getPluginManager().registerEvents(HandleShadowGuessSheriff(this), this)
-
-        pm!!.addPacketListener(PacketHideItemSwitch(this))
+        protocolManager!!.addPacketListener(PacketHideItemSwitch(this))
 
         // Register commands
         getCommand("\$roles")!!.setExecutor(CommandRoles(this))

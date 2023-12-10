@@ -1,6 +1,7 @@
 package dev.osmii.shadow.game.start
 
 import dev.osmii.shadow.Shadow
+import dev.osmii.shadow.enums.CID
 import dev.osmii.shadow.enums.Namespace
 import dev.osmii.shadow.enums.PlayableRole
 import dev.osmii.shadow.util.ItemUtil
@@ -67,7 +68,7 @@ class P2GiveItems(private val shadow: Shadow) {
                         PersistentDataType.BYTE_ARRAY,
                         ItemUtil.forbidden(drop = true, use = false, move = false, moveContainer = true)
                     )
-                    this.persistentDataContainer.set(Namespace.CUSTOM_ID, PersistentDataType.STRING, "sheriff-bow")
+                    this.persistentDataContainer.set(Namespace.CUSTOM_ID, PersistentDataType.STRING, CID.INVENTORY_SHERIFF_BOW)
                 }
                 player.inventory.setItem(9, bow)
             }
@@ -83,7 +84,7 @@ class P2GiveItems(private val shadow: Shadow) {
                     PersistentDataType.BYTE_ARRAY,
                     ItemUtil.forbidden(drop = true, use = false, move = true, moveContainer = true)
                 )
-                this.persistentDataContainer.set(Namespace.CUSTOM_ID, PersistentDataType.STRING, "ability-select")
+                this.persistentDataContainer.set(Namespace.CUSTOM_ID, PersistentDataType.STRING, CID.HOTBAR_ABILITY_SELECT)
             }
             player.inventory.setItem(8, abilitySelector)
         }

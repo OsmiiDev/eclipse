@@ -10,6 +10,7 @@ class Rolelist {
 
     fun addRole(role: RolelistSelector) {
         roles.add(role)
+        roles.sort()
     }
 
     fun getSelectors(): ArrayList<RolelistSelector> {

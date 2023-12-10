@@ -1,11 +1,8 @@
 package dev.osmii.shadow.events.custom
 
 import dev.osmii.shadow.Shadow
-import dev.osmii.shadow.commands.CommandRoles
-import dev.osmii.shadow.enums.Namespace
-import dev.osmii.shadow.enums.PlayableFaction
-import dev.osmii.shadow.enums.PlayableRole
-import dev.osmii.shadow.enums.PlayableSubfaction
+import dev.osmii.shadow.enums.*
+import dev.osmii.shadow.game.rolelist.RolelistGUI
 import dev.osmii.shadow.game.rolelist.RolelistSelector
 import dev.osmii.shadow.util.ItemUtil
 import org.bukkit.Bukkit
@@ -19,7 +16,7 @@ class HandleAddRole(val shadow: Shadow) : Listener {
     @EventHandler
     fun onAddRole(e: InventoryClickEvent) {
         if (e.currentItem == null) return
-        if (!ItemUtil.customIdIs(e.currentItem!!, "role-select-add-role")) return
+        if (!ItemUtil.customIdIs(e.currentItem!!, CID.ROLE_SELECT_ADD_ROLE)) return
 
         val data = e.currentItem!!.itemMeta?.persistentDataContainer?.getOrDefault(
             Namespace.ROLE_SELECT_ADD_ROLE,
@@ -37,7 +34,7 @@ class HandleAddRole(val shadow: Shadow) : Listener {
 
             Bukkit.getScheduler().runTaskLater(shadow, Runnable {
                 e.whoClicked.closeInventory()
-                CommandRoles(shadow).showRoleBook(e.whoClicked as Player)
+                RolelistGUI(shadow).showRoleBook(e.whoClicked as Player)
             }, 1)
             return
         }
@@ -56,7 +53,7 @@ class HandleAddRole(val shadow: Shadow) : Listener {
 
         Bukkit.getScheduler().runTaskLater(shadow, Runnable {
             e.whoClicked.closeInventory()
-            CommandRoles(shadow).showRoleBook(e.whoClicked as Player)
+            RolelistGUI(shadow).showRoleBook(e.whoClicked as Player)
         }, 1)
     }
 }

@@ -1,6 +1,7 @@
-package dev.osmii.shadow.events.custom.abilities.sheriff
+package dev.osmii.shadow.events.custom.abilities.item.sheriff
 
 import dev.osmii.shadow.Shadow
+import dev.osmii.shadow.enums.CID
 import dev.osmii.shadow.util.ItemUtil
 import org.bukkit.Sound
 import org.bukkit.entity.EntityType
@@ -19,7 +20,7 @@ class HandleSheriffBow(val shadow: Shadow) : Listener {
     @EventHandler
     fun onShoot(e: EntityShootBowEvent) {
         if (e.bow == null) return
-        if (!ItemUtil.customIdIs(e.bow!!, "sheriff-bow")) return
+        if (!ItemUtil.customIdIs(e.bow!!, CID.INVENTORY_SHERIFF_BOW)) return
         if (e.entity !is Player) return
 
         e.projectile.isGlowing = true

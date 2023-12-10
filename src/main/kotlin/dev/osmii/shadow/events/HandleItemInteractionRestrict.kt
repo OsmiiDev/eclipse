@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
 class HandleItemInteractionRestrict(private val shadow: Shadow) : Listener {
-
+    // Blocks item dropping, moving, and using for items with the forbidden tag
     @EventHandler
     fun onForbiddenItemDrop(e: PlayerDropItemEvent) {
         if (e.itemDrop.itemStack.itemMeta?.persistentDataContainer?.has(

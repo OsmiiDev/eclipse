@@ -1,6 +1,7 @@
 package dev.osmii.shadow.game.start
 
 import dev.osmii.shadow.Shadow
+import dev.osmii.shadow.enums.CID
 import dev.osmii.shadow.enums.GamePhase
 import dev.osmii.shadow.enums.Namespace
 import dev.osmii.shadow.util.ItemUtil
@@ -51,7 +52,7 @@ class P0InitialCountdown(private val shadow: Shadow) {
                     PersistentDataType.BYTE_ARRAY,
                     ItemUtil.forbidden(drop = true, use = true, move = true)
                 )
-                this.persistentDataContainer.set(Namespace.CUSTOM_ID, PersistentDataType.STRING, "participation-toggle")
+                this.persistentDataContainer.set(Namespace.CUSTOM_ID, PersistentDataType.STRING, CID.HOTBAR_PARTICIPATION_SELECT)
             }
 
             player.inventory.setItem(8, participationToggle)
