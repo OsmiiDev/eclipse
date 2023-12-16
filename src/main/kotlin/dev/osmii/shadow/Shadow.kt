@@ -7,8 +7,8 @@ import dev.osmii.shadow.events.HandleItemInteractionRestrict
 import dev.osmii.shadow.events.custom.HandleAddRole
 import dev.osmii.shadow.events.custom.HandleDayNight
 import dev.osmii.shadow.events.custom.HandleParticipationToggle
-import dev.osmii.shadow.events.custom.abilities.HandleOpenAbilityMenu
 import dev.osmii.shadow.events.custom.abilities.item.sheriff.HandleSheriffBow
+import dev.osmii.shadow.events.custom.abilities.menu.HandleAbilities
 import dev.osmii.shadow.events.game.*
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
@@ -38,7 +38,7 @@ class Shadow : JavaPlugin() {
 
         Bukkit.getPluginManager().registerEvents(HandleParticipationToggle(this), this)
         Bukkit.getPluginManager().registerEvents(HandleAddRole(this), this)
-        Bukkit.getPluginManager().registerEvents(HandleOpenAbilityMenu(this), this)
+        Bukkit.getPluginManager().registerEvents(HandleAbilities(this), this)
 
         protocolManager!!.addPacketListener(PacketHideItemSwitch(this))
 

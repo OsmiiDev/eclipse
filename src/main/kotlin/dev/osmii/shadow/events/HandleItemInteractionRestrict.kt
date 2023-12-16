@@ -184,15 +184,13 @@ class HandleItemInteractionRestrict(private val shadow: Shadow) : Listener {
 
     @EventHandler
     fun onForbiddenItemOffhand(e: PlayerSwapHandItemsEvent) {
-        if (e.mainHandItem!!.itemMeta?.persistentDataContainer?.has(
+        if (!(e.mainHandItem!!.itemMeta?.persistentDataContainer?.has(
                 Namespace.FORBIDDEN,
                 PersistentDataType.BYTE_ARRAY
-            ) == false
-        ) return
-        if (e.offHandItem!!.itemMeta?.persistentDataContainer?.has(
+            ) == true || (e.offHandItem!!.itemMeta?.persistentDataContainer?.has(
                 Namespace.FORBIDDEN,
                 PersistentDataType.BYTE_ARRAY
-            ) == false
+            ) == true))
         ) return
 
         val forbiddenMainHand =
