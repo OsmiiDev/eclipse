@@ -17,6 +17,7 @@ repositories {
     maven("https://oss.sonatype.org/content/repositories/snapshots")
     maven("https://oss.sonatype.org/content/repositories/central")
     maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://maven.enginehub.org/repo/")
     mavenLocal()
 }
 
@@ -25,6 +26,8 @@ dependencies {
     testImplementation(kotlin("test"))
     implementation(kotlin("stdlib"))
     compileOnly("com.comphenix.protocol:ProtocolLib:5.1.0")
+    compileOnly("com.sk89q.worldedit:worldedit-core:7.2.0-SNAPSHOT")
+    compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.2.0-SNAPSHOT")
     compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
 }
 
@@ -53,7 +56,7 @@ tasks {
     }
     shadowJar {
         archiveClassifier.set("")
-        destinationDirectory.set(layout.buildDirectory.dir("C:/Users/osmii/Desktop/Programming/Personal/Minecraft/Server/plugins"))
+        destinationDirectory.set(layout.buildDirectory.dir("C:/Users/Gamer/Desktop/Paper 1.20.1/plugins"))
     }
     jar {
     }

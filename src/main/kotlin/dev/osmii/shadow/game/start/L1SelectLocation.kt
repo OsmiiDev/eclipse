@@ -1,20 +1,57 @@
 package dev.osmii.shadow.game.start
 
+import com.sk89q.worldedit.EditSession
+import com.sk89q.worldedit.WorldEdit
+import com.sk89q.worldedit.bukkit.BukkitAdapter
+import com.sk89q.worldedit.function.mask.BlockTypeMask
+import com.sk89q.worldedit.function.pattern.StateApplyingPattern
+import com.sk89q.worldedit.math.BlockVector3
+import com.sk89q.worldedit.regions.CuboidRegion
+import com.sk89q.worldedit.regions.Region
+import com.sk89q.worldedit.world.block.BlockTypes
 import dev.osmii.shadow.Shadow
 import dev.osmii.shadow.enums.GamePhase
-import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Location
 import org.bukkit.entity.Player
-import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin
 
+const val WORLD_BORDER_SIZE = 135.0
+
 class L1SelectLocation(private val shadow: Shadow) {
+    fun checkForStronghold(center : Location) : Boolean { // checks if there are more than 12 end portal frames in the area
+        val session : EditSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(center.world))
+        val region : Region = CuboidRegion(BlockVector3.at(center.x + WORLD_BORDER_SIZE,-64.0,center.z + WORLD_BORDER_SIZE),
+            BlockVector3.at(center.x - WORLD_BORDER_SIZE,64.0,center.z - WORLD_BORDER_SIZE))
+
+        return session.countBlocks(region,
+            BlockTypes.END_PORTAL_FRAME!!.allStates.map { it.toBaseBlock() }.toSet()) >= 12
+    }
+
     fun selectLocation(location: Location) {
-        val world = Objects.requireNonNull(shadow.server.getWorld("world"))
+        val world = location.world
+        if(!checkForStronghold(location)) {
+            shadow.server.broadcast(
+                MiniMessage.miniMessage().deserialize(
+                    "<red>Failed to start game. No Portal Room within Area</red>"
+                )
+            )
+            shadow.gameState.currentPhase = GamePhase.IN_BETWEEN_ROUND
+            return
+        }
+
+        val session : EditSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(location.world))
+        val region : Region = CuboidRegion(BlockVector3.at(location.x + WORLD_BORDER_SIZE,-64.0,location.z + WORLD_BORDER_SIZE),
+            BlockVector3.at(location.x - WORLD_BORDER_SIZE,64.0,location.z - WORLD_BORDER_SIZE))
+
+        val eyeState = HashMap<String,String>()
+        eyeState["eye"] = "false"
+        session.replaceBlocks(region,BlockTypeMask(session,BlockTypes.END_PORTAL_FRAME), StateApplyingPattern(session,eyeState))
+        session.close()
+
         world!!.worldBorder.center = location
-        world.worldBorder.size = 135.0
+        world.worldBorder.size = WORLD_BORDER_SIZE
         world.setSpawnLocation(location)
 
         if(shadow.server.onlinePlayers.size < shadow.gameState.originalRolelist.roles.size) {
