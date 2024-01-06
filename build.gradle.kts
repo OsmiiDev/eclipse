@@ -26,8 +26,8 @@ dependencies {
     testImplementation(kotlin("test"))
     implementation(kotlin("stdlib"))
     compileOnly("com.comphenix.protocol:ProtocolLib:5.1.0")
-    compileOnly("com.sk89q.worldedit:worldedit-core:7.2.0-SNAPSHOT")
-    compileOnly("com.sk89q.worldedit:worldedit-bukkit:7.2.0-SNAPSHOT")
+    compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Core:2.8.4")
+    compileOnly("com.fastasyncworldedit:FastAsyncWorldEdit-Bukkit:2.8.4")
     compileOnly("io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT")
 }
 
@@ -56,7 +56,7 @@ tasks {
     }
     shadowJar {
         archiveClassifier.set("")
-        destinationDirectory.set(layout.buildDirectory.dir("C:/Users/Gamer/Desktop/Paper 1.20.1/plugins"))
+        destinationDirectory.set(layout.buildDirectory.dir("C:/Users/Gamer/Desktop/Purpur 1.20.1/plugins"))
     }
     jar {
     }

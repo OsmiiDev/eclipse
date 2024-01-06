@@ -17,7 +17,7 @@ import org.bukkit.entity.Player
 import kotlin.math.cos
 import kotlin.math.sin
 
-const val WORLD_BORDER_SIZE = 135.0
+const val WORLD_BORDER_SIZE = 62.5
 
 class L1SelectLocation(private val shadow: Shadow) {
     fun checkForStronghold(center : Location) : Boolean { // checks if there are more than 12 end portal frames in the area
@@ -51,7 +51,7 @@ class L1SelectLocation(private val shadow: Shadow) {
         session.close()
 
         world!!.worldBorder.center = location
-        world.worldBorder.size = WORLD_BORDER_SIZE
+        world.worldBorder.size = WORLD_BORDER_SIZE*2
         world.setSpawnLocation(location)
 
         if(shadow.server.onlinePlayers.size < shadow.gameState.originalRolelist.roles.size) {

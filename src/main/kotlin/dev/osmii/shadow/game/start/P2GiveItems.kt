@@ -89,6 +89,6 @@ class P2GiveItems(private val shadow: Shadow) {
             player.inventory.setItem(8, abilitySelector)
         }
 
-        P3SpawnEnderJesus(shadow).spawnEnderJesus()
+        P3SpawnEnderEyes(shadow).spawnEnderEyes()
     }
 }
