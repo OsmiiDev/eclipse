@@ -14,16 +14,35 @@ import dev.osmii.shadow.enums.GamePhase
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Location
 import org.bukkit.entity.Player
+import org.bukkit.util.BoundingBox
 import kotlin.math.cos
 import kotlin.math.sin
 
 const val WORLD_BORDER_SIZE = 62.5
 
 class L1SelectLocation(private val shadow: Shadow) {
-    fun checkForStronghold(center : Location) : Boolean { // checks if there are more than 12 end portal frames in the area
+    private fun checkForStronghold(center : Location) : Boolean { // checks if there are more than 12 end portal frames in the area
         val session : EditSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(center.world))
-        val region : Region = CuboidRegion(BlockVector3.at(center.x + WORLD_BORDER_SIZE,-64.0,center.z + WORLD_BORDER_SIZE),
-            BlockVector3.at(center.x - WORLD_BORDER_SIZE,64.0,center.z - WORLD_BORDER_SIZE))
+
+        val worldBorderBoundingBox = BoundingBox(center.x + WORLD_BORDER_SIZE, -64.0,
+            center.z + WORLD_BORDER_SIZE, center.x - WORLD_BORDER_SIZE, 315.0,
+            center.z - WORLD_BORDER_SIZE)
+
+        var strongholdBoundingBox : BoundingBox? = null
+
+        for (bb in shadow.boundingBoxSet) {
+            if (worldBorderBoundingBox.overlaps(worldBorderBoundingBox)) {
+                strongholdBoundingBox = bb
+                break
+            }
+        }
+
+        if(strongholdBoundingBox == null) return false
+
+        strongholdBoundingBox = worldBorderBoundingBox.intersection(strongholdBoundingBox)
+
+        val region = CuboidRegion(BlockVector3.at(strongholdBoundingBox.minX,strongholdBoundingBox.minY,strongholdBoundingBox.minZ),
+            BlockVector3.at(strongholdBoundingBox.maxX,strongholdBoundingBox.maxY,strongholdBoundingBox.maxZ))
 
         return session.countBlocks(region,
             BlockTypes.END_PORTAL_FRAME!!.allStates.map { it.toBaseBlock() }.toSet()) >= 12
