@@ -5,8 +5,6 @@ import dev.osmii.shadow.enums.CID
 import dev.osmii.shadow.enums.Namespace
 import dev.osmii.shadow.enums.PlayableRole
 import dev.osmii.shadow.util.ItemUtil
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -14,10 +12,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
-import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.persistence.PersistentDataType
-import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
 
 class P2GiveItems(private val shadow: Shadow) {
     fun giveItems() {
@@ -29,32 +24,6 @@ class P2GiveItems(private val shadow: Shadow) {
             }
             player.inventory.clear()
             player.inventory.setItem(0, ItemStack(Material.BREAD, 16))
-
-            if (role == PlayableRole.SHADOW) {
-                val strength = ItemStack(Material.POTION, 1)
-                strength.itemMeta = (strength.itemMeta as PotionMeta).apply {
-                    this.displayName(MiniMessage.miniMessage().deserialize("<!i><red>Potion of Strength</red></!i>"))
-                    this.lore(listOf(
-                        Component.text("Use only when needed... you could be found out").color(NamedTextColor.GRAY)
-                    ))
-                    this.addCustomEffect(
-                        PotionEffect(
-                            PotionEffectType.INCREASE_DAMAGE,
-                            -1,
-                            0,
-                            false,
-                            false,
-                            true
-                        ), true
-                    )
-                    this.persistentDataContainer.set(
-                        Namespace.FORBIDDEN,
-                        PersistentDataType.BYTE_ARRAY,
-                        ItemUtil.forbidden(drop = true, use = false, move = false, moveContainer = false)
-                    )
-                }
-                player.inventory.setItem(17, strength)
-            }
 
             if (role == PlayableRole.SHERIFF) {
                 val bow = ItemStack(Material.BOW, 1)

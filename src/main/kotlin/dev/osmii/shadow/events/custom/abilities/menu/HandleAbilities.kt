@@ -4,7 +4,8 @@ import dev.osmii.shadow.Shadow
 import dev.osmii.shadow.enums.CID
 import dev.osmii.shadow.enums.PlayableRole
 import dev.osmii.shadow.game.abilities.Ability
-import dev.osmii.shadow.game.abilities.GuessSheriff
+import dev.osmii.shadow.game.abilities.KillOneNearby
+import dev.osmii.shadow.game.abilities.ToggleStrength
 import dev.osmii.shadow.util.ItemUtil
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
@@ -56,7 +57,8 @@ class HandleAbilities(val shadow: Shadow): Listener {
                 if (e.item == null || !ItemUtil.customIdIs(e.item!!, CID.HOTBAR_ABILITY_SELECT)) return
                 val abilityList : MutableList<Ability> = ArrayList()
                 if(shadow.gameState.currentRoles[e.player.uniqueId] == PlayableRole.SHADOW) {
-                        abilityList.add(GuessSheriff())
+                        abilityList.add(ToggleStrength())
+                        abilityList.add(KillOneNearby())
                 }
                 createAbilityGUI(shadow,e.player,abilityList)
         }
