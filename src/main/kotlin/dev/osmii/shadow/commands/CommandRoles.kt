@@ -48,8 +48,8 @@ class CommandRoles(val shadow: Shadow) : CommandExecutor {
             "remove" -> {
                 if (args.size < 3) return false
 
-                val page = args[2].toInt()
-                val index = args[3].toInt()
+                val page = args[1].toInt()
+                val index = args[2].toInt()
                 val id = page * 14 + index
                 // Ensure that the ID to remove actually exists
                 if(index == -1 || id > shadow.gameState.originalRolelist.roles.size || id < 0) return false

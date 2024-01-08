@@ -8,10 +8,8 @@ import dev.osmii.shadow.enums.GamePhase
 import dev.osmii.shadow.enums.PlayableFaction
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.minimessage.MiniMessage
-import net.minecraft.network.protocol.Packet
 import org.bukkit.Bukkit
 import org.bukkit.World
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
@@ -67,6 +65,7 @@ class HandleDayNight(val shadow: Shadow) {
                             if (alreadyUpdated) return@inner
 
                             val container = PacketContainer(PacketType.Play.Server.ENTITY_METADATA)
+                            
                             val watcher = WrappedDataWatcher()
                             watcher.entity = other
                             watcher.setObject(0, WrappedDataWatcher.Registry.get(java.lang.Byte::class.java), 0x40.toByte(), true)
