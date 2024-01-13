@@ -40,22 +40,45 @@ class P3SpawnEnderEyes(private val shadow: Shadow) {
             val loc = overworld.getHighestBlockAt(x,z).location // World 0 is overworld
             loc.add(0.0,1.0,0.0)
             createEnderEye(loc)
+            //shadow.logger.info("overworld ender eye spawned at: $loc")
         }
 
 
         // Spawn Stronghold Ender Eyes
 
+        /* We replace the target spaces for the ender eyes with structure blocks,
+         * then replace them back (with a similar pattern).
+         * We then get the blocks changed and pick a few on which to spawn ender eyes.
+         */
+
         val session = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(overworld))
 
-        val stoneBrickMask = BlockTypeMask(session, BlockTypes.STONE_BRICKS, BlockTypes.CRACKED_STONE_BRICKS,BlockTypes.MOSSY_STONE_BRICKS)
+
+        /* This mask searches for this pattern
+         *  ________
+         * |        |
+         * |   Air  |
+         * |________|
+         *  ________
+         * |        |
+         * |   Air  |
+         * |________|
+         *  ________
+         * | Stone  |
+         * | Bricks |
+         * |________|
+         * NOTE: Stone bricks or equivalents like cracked & mossy stone bricks.
+         */
+
         val strongholdMask = MaskIntersection()
 
-
+        // Creates a mask that checks for this
         strongholdMask.add(OffsetMask(Masks.negate(ExistingBlockMask(session)),
             BlockVector3.at(0,1,0),-64,315)) // FAWE only has support for OffsetMask, not OffsetsMasks
         strongholdMask.add(OffsetMask(Masks.negate(ExistingBlockMask(session)),
             BlockVector3.at(0,2,0),-64,315))
 
+        val stoneBrickMask = BlockTypeMask(session, BlockTypes.STONE_BRICKS, BlockTypes.CRACKED_STONE_BRICKS,BlockTypes.MOSSY_STONE_BRICKS)
         strongholdMask.add(stoneBrickMask)
 
         val worldBorderBoundingBox = BoundingBox(overworld.spawnLocation.x + WORLD_BORDER_SIZE, -64.0,
@@ -65,7 +88,7 @@ class P3SpawnEnderEyes(private val shadow: Shadow) {
         var strongholdBoundingBox : BoundingBox? = null
 
         for (bb in shadow.boundingBoxSet) {
-            if (worldBorderBoundingBox.overlaps(worldBorderBoundingBox)) {
+            if (worldBorderBoundingBox.overlaps(bb)) {
                 strongholdBoundingBox = bb
                 break
             }
@@ -75,8 +98,6 @@ class P3SpawnEnderEyes(private val shadow: Shadow) {
 
         val region = CuboidRegion(BlockVector3.at(strongholdBoundingBox.minX,strongholdBoundingBox.minY,strongholdBoundingBox.minZ),
             BlockVector3.at(strongholdBoundingBox.maxX,strongholdBoundingBox.maxY,strongholdBoundingBox.maxZ))
-
-        shadow.logger.info("strongholdRegion: $region")
 
         session.replaceBlocks(region,strongholdMask, BlockTypes.STRUCTURE_BLOCK!!.defaultState)
 
@@ -103,13 +124,12 @@ class P3SpawnEnderEyes(private val shadow: Shadow) {
             })
         }
 
-        shadow.logger.info("possiblePositions: $possiblePositions")
-
         if(possiblePositions.size > ENDER_EYE_STRONGHOLD_COUNT) {
             for (i in 1..ENDER_EYE_STRONGHOLD_COUNT) {
                 val chosenVector = possiblePositions[Random.nextInt(0, possiblePositions.size - 1)]
                 val loc = Location(overworld, chosenVector.x, chosenVector.y + 1, chosenVector.z)
                 createEnderEye(loc)
+                //shadow.logger.info("stronghold ender eye spawned at: $loc")
             }
         } else {
             shadow.server.broadcast(MiniMessage.miniMessage().deserialize("<red> not enough space to spawn stronghold ender eyes </red>"))
@@ -150,6 +170,7 @@ class P3SpawnEnderEyes(private val shadow: Shadow) {
             eyePosition.add(0.0,1.0,0.0)
 
             createEnderEye(eyePosition)
+            //shadow.logger.info("nether ender eye spawned at: $eyePosition")
         }
 
 
@@ -159,7 +180,9 @@ class P3SpawnEnderEyes(private val shadow: Shadow) {
             val x = Random.nextInt((-WORLD_BORDER_SIZE).toInt(), WORLD_BORDER_SIZE.toInt()) + overworld.spawnLocation.x.toInt()/8
             val z = Random.nextInt((-WORLD_BORDER_SIZE).toInt(), WORLD_BORDER_SIZE.toInt()) + overworld.spawnLocation.z.toInt()/8
             val loc = Location(nether, x.toDouble(), 128.0, z.toDouble())
-            shadow.logger.info("nether roof ender eye spawned at: ${createEnderEye(loc).location}")
+
+            createEnderEye(loc)
+            //shadow.logger.info("nether roof ender eye spawned at: $loc")
         }
 
         // Finish phase
