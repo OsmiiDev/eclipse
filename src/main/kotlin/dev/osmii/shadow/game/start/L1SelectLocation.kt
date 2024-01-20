@@ -78,7 +78,7 @@ class L1SelectLocation(private val shadow: Shadow) {
         var strongholdBoundingBox : BoundingBox? = null
 
         for (bb in shadow.boundingBoxSet) {
-            if (worldBorderBoundingBox.overlaps(worldBorderBoundingBox)) {
+            if (worldBorderBoundingBox.overlaps(bb)) {
                 strongholdBoundingBox = bb
                 break
             }
