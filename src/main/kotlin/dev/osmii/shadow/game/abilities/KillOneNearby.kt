@@ -31,7 +31,7 @@ class KillOneNearby : Ability {
             }
             killed[0].health = 0.0
             killed[0].sendHealthUpdate()
-            player.sendMessage("Killed ${killed[0].displayName()}")
+            player.sendMessage(Component.text("Killed ").append(killed[0].displayName()))
             lastKillMap[player] = shadow.server.currentTick
         } else {
             player.sendMessage("No nearby players to kill")
