@@ -63,7 +63,7 @@ class KillOneNearby : Ability {
             killed[0].location.world.strikeLightningEffect(killed[0].location)
             player.sendMessage(
                 MiniMessage.miniMessage().deserialize(
-                    "<red>Killed</red> <blue>${killed[0].displayName().toString()}</blue><red>.</red>"
+                    "<red>Killed</red> <blue>${killed[0].name}</blue><red>.</red>"
                 )
             )
 
