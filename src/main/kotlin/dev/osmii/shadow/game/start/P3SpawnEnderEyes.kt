@@ -193,6 +193,7 @@ class P3SpawnEnderEyes(private val shadow: Shadow) {
 
     private fun createEnderEye(loc : Location) : Item {
         loc.chunk.load()
+        loc.add(0.5,1.0,0.5)
         val e = loc.world.spawnEntity(loc, EntityType.DROPPED_ITEM) as Item
         e.itemStack = ItemStack(Material.ENDER_EYE,1)
         e.setWillAge(false)
@@ -200,7 +201,7 @@ class P3SpawnEnderEyes(private val shadow: Shadow) {
         e.isInvulnerable = true
         e.isUnlimitedLifetime = true
 
-        val display = loc.world.spawnEntity(loc.add(0.5,1.0,0.5), EntityType.ITEM_DISPLAY) as ItemDisplay
+        val display = loc.world.spawnEntity(loc, EntityType.ITEM_DISPLAY) as ItemDisplay
         display.itemStack = e.itemStack
         display.displayHeight = 3.0F
         display.displayWidth = 3.0F
