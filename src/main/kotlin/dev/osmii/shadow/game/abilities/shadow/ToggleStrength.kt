@@ -21,10 +21,10 @@ class ToggleStrength : Ability {
 
     init {
         item.itemMeta = (item.itemMeta as PotionMeta).apply {
-            this.displayName(MiniMessage.miniMessage().deserialize("<red>Empower</red>"))
+            this.displayName(MiniMessage.miniMessage().deserialize("<!i><red>Empower</red></!i>"))
             this.lore(
                 listOf(
-                    MiniMessage.miniMessage().deserialize("<gray>Gain</gray> <blue>Strength I</blue> <gray>.</gray>")
+                    MiniMessage.miniMessage().deserialize("<!i><gray>Gain</gray> <blue>Strength I</blue> <gray>.</gray></!i>")
                 )
             )
             this.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES)

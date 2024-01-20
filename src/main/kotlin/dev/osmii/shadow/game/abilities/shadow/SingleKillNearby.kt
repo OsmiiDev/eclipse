@@ -63,7 +63,7 @@ class KillOneNearby : Ability {
             killed[0].location.world.strikeLightningEffect(killed[0].location)
             player.sendMessage(
                 MiniMessage.miniMessage().deserialize(
-                    "<red>Killed</red> <blue>${killed[0].displayName()}</blue><red>.</red>"
+                    "<red>Killed</red> <blue>${killed[0].displayName().toString()}</blue><red>.</red>"
                 )
             )
 
@@ -76,7 +76,7 @@ class KillOneNearby : Ability {
 
     companion object {
         private const val COOLDOWN = 7 * 60
-        private const val INITIAL_COOLDOWN = 5 * 60
+        private const val INITIAL_COOLDOWN = 1 * 60
 
     }
 }

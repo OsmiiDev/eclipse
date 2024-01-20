@@ -10,9 +10,9 @@ object TimeUtil {
     }
 
     fun secondsToText(seconds: Int): String {
-        val hours = seconds / 3600
-        val minutes = (seconds % 3600) / 60
         val secs = seconds % 60
+        val minutes = (seconds - secs) / 60 % 60
+        val hours = (seconds - secs - minutes * 60) / 3600
 
         return if (hours > 0) String.format("%d:%02d:%02d", hours, minutes, secs)
         else if (minutes > 0) String.format("%d:%02d", minutes, secs)
@@ -26,14 +26,14 @@ object TimeUtil {
             cooldownMap[key] = HashMap()
         }
         if (cooldownMap[key]!![uuid] == null) {
-            cooldownMap[key]!![uuid] = Bukkit.getServer().currentTick
+            cooldownMap[key]!![uuid] = -1
         }
 
         val gameStart = shadow.gameState.startTick
         if (shadow.server.currentTick - gameStart < initial * 20) {
             return (initial * 20 - (shadow.server.currentTick - gameStart)) / 20
         }
-        if (Bukkit.getServer().currentTick - cooldownMap[key]!![uuid]!! < seconds * 20) {
+        if (Bukkit.getServer().currentTick - cooldownMap[key]!![uuid]!! < seconds * 20 && cooldownMap[key]!![uuid]!! != -1) {
             return (seconds * 20 - (shadow.server.currentTick - cooldownMap[key]!![uuid]!!)) / 20
         }
 
