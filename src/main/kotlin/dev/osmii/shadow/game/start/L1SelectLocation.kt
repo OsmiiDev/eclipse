@@ -7,7 +7,6 @@ import com.sk89q.worldedit.function.mask.BlockTypeMask
 import com.sk89q.worldedit.function.pattern.StateApplyingPattern
 import com.sk89q.worldedit.math.BlockVector3
 import com.sk89q.worldedit.regions.CuboidRegion
-import com.sk89q.worldedit.regions.Region
 import com.sk89q.worldedit.world.block.BlockTypes
 import dev.osmii.shadow.Shadow
 import dev.osmii.shadow.enums.GamePhase
@@ -31,7 +30,7 @@ class L1SelectLocation(private val shadow: Shadow) {
         var strongholdBoundingBox : BoundingBox? = null
 
         for (bb in shadow.boundingBoxSet) {
-            if (worldBorderBoundingBox.overlaps(worldBorderBoundingBox)) {
+            if (worldBorderBoundingBox.overlaps(bb)) {
                 strongholdBoundingBox = bb
                 break
             }
@@ -49,7 +48,17 @@ class L1SelectLocation(private val shadow: Shadow) {
     }
 
     fun selectLocation(location: Location) {
-        val world = location.world
+        val overworld = shadow.server.worlds[0]
+        val nether = shadow.server.worlds[1]
+
+        if(location.world != overworld) {
+            shadow.server.broadcast(
+                MiniMessage.miniMessage().deserialize(
+                    "<red>Failed to start game. Please start the game in the default overworld</red>"
+                )
+            )
+        }
+
         if(!checkForStronghold(location)) {
             shadow.server.broadcast(
                 MiniMessage.miniMessage().deserialize(
@@ -60,18 +69,39 @@ class L1SelectLocation(private val shadow: Shadow) {
             return
         }
 
-        val session : EditSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(location.world))
-        val region : Region = CuboidRegion(BlockVector3.at(location.x + WORLD_BORDER_SIZE,-64.0,location.z + WORLD_BORDER_SIZE),
-            BlockVector3.at(location.x - WORLD_BORDER_SIZE,64.0,location.z - WORLD_BORDER_SIZE))
+        val session : EditSession = WorldEdit.getInstance().newEditSession(BukkitAdapter.adapt(overworld))
+
+        val worldBorderBoundingBox = BoundingBox(location.x + WORLD_BORDER_SIZE, -64.0,
+            location.z + WORLD_BORDER_SIZE, location.x - WORLD_BORDER_SIZE, 315.0,
+            location.z - WORLD_BORDER_SIZE)
+
+        var strongholdBoundingBox : BoundingBox? = null
+
+        for (bb in shadow.boundingBoxSet) {
+            if (worldBorderBoundingBox.overlaps(worldBorderBoundingBox)) {
+                strongholdBoundingBox = bb
+                break
+            }
+        }
+
+        strongholdBoundingBox = worldBorderBoundingBox.intersection(strongholdBoundingBox!!)
+
+        val region = CuboidRegion(BlockVector3.at(strongholdBoundingBox.minX,strongholdBoundingBox.minY,strongholdBoundingBox.minZ),
+            BlockVector3.at(strongholdBoundingBox.maxX,strongholdBoundingBox.maxY,strongholdBoundingBox.maxZ))
 
         val eyeState = HashMap<String,String>()
         eyeState["eye"] = "false"
         session.replaceBlocks(region,BlockTypeMask(session,BlockTypes.END_PORTAL_FRAME), StateApplyingPattern(session,eyeState))
         session.close()
 
-        world!!.worldBorder.center = location
-        world.worldBorder.size = WORLD_BORDER_SIZE*2
-        world.setSpawnLocation(location)
+        overworld!!.worldBorder.center = location
+        overworld.worldBorder.size = WORLD_BORDER_SIZE*2
+        overworld.setSpawnLocation(location)
+
+        val netherLocation = Location(nether,location.x/8,0.0,location.z/8)
+
+        nether!!.worldBorder.center = netherLocation
+        nether.worldBorder.size = WORLD_BORDER_SIZE*2
 
         if(shadow.server.onlinePlayers.size < shadow.gameState.originalRolelist.roles.size) {
             shadow.server.broadcast(

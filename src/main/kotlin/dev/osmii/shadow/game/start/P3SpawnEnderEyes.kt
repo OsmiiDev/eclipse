@@ -17,6 +17,7 @@ import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.EntityType
 import org.bukkit.entity.Item
+import org.bukkit.entity.ItemDisplay
 import org.bukkit.inventory.ItemStack
 import org.bukkit.util.BoundingBox
 import kotlin.random.Random
@@ -197,6 +198,12 @@ class P3SpawnEnderEyes(private val shadow: Shadow) {
         e.setCanMobPickup(false)
         e.isInvulnerable = true
         e.isUnlimitedLifetime = true
+
+        val display = loc.world.spawnEntity(loc.add(0.5,1.0,0.5), EntityType.ITEM_DISPLAY) as ItemDisplay
+        display.itemStack = e.itemStack
+        display.displayHeight = 3.0F
+        display.displayWidth = 3.0F
+
         return e
     }
 
