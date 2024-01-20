@@ -1,4 +1,4 @@
-package dev.osmii.shadow.events
+package dev.osmii.shadow.util
 
 import org.bukkit.util.BoundingBox
 

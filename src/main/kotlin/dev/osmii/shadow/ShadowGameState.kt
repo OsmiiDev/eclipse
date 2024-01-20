@@ -12,6 +12,8 @@ class ShadowGameState {
 
     var participationStatus = HashMap<UUID, Boolean>()
 
+    var startTick: Int = 0
+
     var originalRolelist: Rolelist = Rolelist()
     var originalRoles: HashMap<UUID, PlayableRole> = HashMap<UUID, PlayableRole>()
     var currentRoles: HashMap<UUID, PlayableRole> = HashMap<UUID, PlayableRole>()

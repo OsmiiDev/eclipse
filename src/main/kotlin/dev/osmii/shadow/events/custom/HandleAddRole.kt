@@ -28,7 +28,7 @@ class HandleAddRole(val shadow: Shadow) : Listener {
             "basic" -> shadow.gameState.originalRolelist.addRole(RolelistSelector("basic"))
             "all" -> shadow.gameState.originalRolelist.addRole(RolelistSelector("all"))
         }
-        if(data == "special" || data == "basic" || data == "all") {
+        if (data == "special" || data == "basic" || data == "all") {
             e.isCancelled = true
             e.whoClicked.setItemOnCursor(null)
 

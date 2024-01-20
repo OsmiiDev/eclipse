@@ -15,8 +15,8 @@ class HandleJoinLeave(private val shadow: Shadow) : Listener {
     fun onJoin(e: PlayerJoinEvent) {
         Bukkit.getScoreboardManager().mainScoreboard.getTeam("players")?.addEntry(e.player.name)
 
-        if(shadow.gameState.currentPhase == GamePhase.IN_BETWEEN_ROUND || shadow.gameState.currentPhase == GamePhase.NONE) return
-        if(shadow.gameState.currentRoles.containsKey(e.player.uniqueId)) return
+        if (shadow.gameState.currentPhase == GamePhase.IN_BETWEEN_ROUND || shadow.gameState.currentPhase == GamePhase.NONE) return
+        if (shadow.gameState.currentRoles.containsKey(e.player.uniqueId)) return
 
         val p = e.player
         shadow.gameState.currentRoles[p.uniqueId] = PlayableRole.SPECTATOR

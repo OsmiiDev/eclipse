@@ -57,7 +57,7 @@ class HandleDayNight(val shadow: Shadow) {
                         p.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 40, 0, false, false))
                     }
                     if (shadow.gameState.currentRoles[p.uniqueId]!!.roleFaction == PlayableFaction.SHADOW) {
-                        shadow.server.onlinePlayers.forEach inner@ { other ->
+                        shadow.server.onlinePlayers.forEach inner@{ other ->
                             // If glowing is already updated for this player, don't update it again
                             val alreadyUpdated = glowingUpdatedFor.any { pair ->
                                 pair.first == other.entityId && pair.second == p.entityId
@@ -65,10 +65,15 @@ class HandleDayNight(val shadow: Shadow) {
                             if (alreadyUpdated) return@inner
 
                             val container = PacketContainer(PacketType.Play.Server.ENTITY_METADATA)
-                            
+
                             val watcher = WrappedDataWatcher()
                             watcher.entity = other
-                            watcher.setObject(0, WrappedDataWatcher.Registry.get(java.lang.Byte::class.java), 0x40.toByte(), true)
+                            watcher.setObject(
+                                0,
+                                WrappedDataWatcher.Registry.get(java.lang.Byte::class.java),
+                                0x40.toByte(),
+                                true
+                            )
                             container.integers.write(0, other.entityId) // The entity ID
                             container.watchableCollectionModifier.write(0, watcher.watchableObjects) // The data watcher
                             shadow.protocolManager!!.sendServerPacket(p, container)

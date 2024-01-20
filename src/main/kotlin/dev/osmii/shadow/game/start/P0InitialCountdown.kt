@@ -21,14 +21,22 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class P0InitialCountdown(private val shadow: Shadow) {
     fun startCountdown() {
+        if (shadow.gameState.currentPhase != GamePhase.LOCATION_SELECTED) {
+            shadow.server.broadcast(
+                MiniMessage.miniMessage().deserialize("<red>The location has not been selected yet</red>")
+            )
+        }
+
         shadow.gameState.currentRoles.clear()
         shadow.gameState.currentWinners.clear()
         for (player in shadow.server.onlinePlayers) {
             shadow.gameState.participationStatus.putIfAbsent(player.uniqueId, true)
 
             player.sendMessage(
-                MiniMessage.miniMessage().deserialize("<green>The game will start in 10 seconds!</green>" +
-                    "\n<i><gray>You can toggle your participation status by clicking the ender eye in your hotbar.</gray></i>")
+                MiniMessage.miniMessage().deserialize(
+                    "<green>The game will start in 10 seconds!</green>" +
+                            "\n<i><gray>You can toggle your participation status by clicking the ender eye in your hotbar.</gray></i>"
+                )
             )
 
             val participationToggle = ItemStack(Material.ENDER_EYE)
@@ -38,12 +46,14 @@ class P0InitialCountdown(private val shadow: Shadow) {
                 this.addItemFlags(ItemFlag.HIDE_ENCHANTS)
                 if (shadow.gameState.participationStatus[player.uniqueId]!!) {
                     this.displayName(
-                        MiniMessage.miniMessage().deserialize("<!i><gray>Participation: <green>Participating</green></gray></!i>")
+                        MiniMessage.miniMessage()
+                            .deserialize("<!i><gray>Participation: <green>Participating</green></gray></!i>")
                     )
                     this.addEnchant(Enchantment.DAMAGE_ALL, 1, true)
                 } else {
                     this.displayName(
-                        MiniMessage.miniMessage().deserialize("<!i><reset><gray>Participation: <red>Not Participating</red></gray></!i>")
+                        MiniMessage.miniMessage()
+                            .deserialize("<!i><reset><gray>Participation: <red>Not Participating</red></gray></!i>")
                     )
                 }
 
@@ -52,7 +62,11 @@ class P0InitialCountdown(private val shadow: Shadow) {
                     PersistentDataType.BYTE_ARRAY,
                     ItemUtil.forbidden(drop = true, use = true, move = true)
                 )
-                this.persistentDataContainer.set(Namespace.CUSTOM_ID, PersistentDataType.STRING, CID.HOTBAR_PARTICIPATION_SELECT)
+                this.persistentDataContainer.set(
+                    Namespace.CUSTOM_ID,
+                    PersistentDataType.STRING,
+                    CID.HOTBAR_PARTICIPATION_SELECT
+                )
             }
 
             player.inventory.setItem(8, participationToggle)

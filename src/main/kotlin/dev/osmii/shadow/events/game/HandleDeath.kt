@@ -80,7 +80,8 @@ class HandleDeath(private val shadow: Shadow) : Listener {
         if (shadow.gameState.currentRoles[e.entity.uniqueId]?.roleFaction != PlayableFaction.VILLAGE) return
 
         shadow.server.broadcast(
-            MiniMessage.miniMessage().deserialize("<gold>A Sheriff, ${p.name}, has killed an innocent villager. They will be executed for their crimes.</gold>")
+            MiniMessage.miniMessage()
+                .deserialize("<gold>A Sheriff, ${p.name}, has killed an innocent villager. They will be executed for their crimes.</gold>")
         )
 
         Bukkit.getScheduler().runTaskLater(shadow, Runnable {

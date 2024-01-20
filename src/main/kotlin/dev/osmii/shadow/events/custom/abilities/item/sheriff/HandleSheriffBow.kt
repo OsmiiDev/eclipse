@@ -30,10 +30,10 @@ class HandleSheriffBow(val shadow: Shadow) : Listener {
 
     @EventHandler
     fun onHit(e: EntityDamageByEntityEvent) {
-        if(e.damager.entityId !in sheriffArrows.keys) return
-        if(sheriffs[e.damager.entityId] == null || sheriffs[e.damager.entityId]?.isOnline == false) return
+        if (e.damager.entityId !in sheriffArrows.keys) return
+        if (sheriffs[e.damager.entityId] == null || sheriffs[e.damager.entityId]?.isOnline == false) return
         e.damage = 1000.0
-        if(e.entityType == EntityType.ENDER_DRAGON || e.entityType == EntityType.WITHER) {
+        if (e.entityType == EntityType.ENDER_DRAGON || e.entityType == EntityType.WITHER) {
             // Disable damage to boss entities
             e.damage = 0.0
             sheriffs[e.damager.entityId]?.world?.strikeLightning(sheriffs[e.damager.entityId]!!.location)
@@ -41,7 +41,12 @@ class HandleSheriffBow(val shadow: Shadow) : Listener {
 
         // Break bow
         val bow = sheriffArrows[e.damager.entityId]
-        sheriffs[e.damager.entityId]?.playSound(sheriffs[e.damager.entityId]!!.location, Sound.ITEM_SHIELD_BREAK, 1.0f, 1.0f)
+        sheriffs[e.damager.entityId]?.playSound(
+            sheriffs[e.damager.entityId]!!.location,
+            Sound.ITEM_SHIELD_BREAK,
+            1.0f,
+            1.0f
+        )
         bow?.amount = 0
     }
 }

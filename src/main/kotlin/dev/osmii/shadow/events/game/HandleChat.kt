@@ -15,7 +15,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import kotlin.math.ceil
 
-class Renderer: ChatRenderer {
+class Renderer : ChatRenderer {
     override fun render(source: Player, sourceDisplayName: Component, message: Component, viewer: Audience): Component {
         return MiniMessage.miniMessage().deserialize(
             "<white>${(source.displayName() as TextComponent).content()} » </white><gray>${(message as TextComponent).content()}</gray>"
@@ -23,16 +23,17 @@ class Renderer: ChatRenderer {
     }
 
 }
-class HandleChat (private val shadow: Shadow) : Listener {
 
-    private var lastChat: HashMap<Player, Double>  = HashMap()
+class HandleChat(private val shadow: Shadow) : Listener {
+
+    private var lastChat: HashMap<Player, Double> = HashMap()
 
     @EventHandler
     fun onChat(e: AsyncChatEvent) {
         e.renderer(Renderer())
 
-        if(shadow.gameState.currentPhase != GamePhase.GAME_IN_PROGRESS) return
-        if(e.player.isOp) return
+        if (shadow.gameState.currentPhase != GamePhase.GAME_IN_PROGRESS) return
+        if (e.player.isOp) return
 
         // If player is spectator, cancel
         if (shadow.gameState.currentRoles[e.player.uniqueId] == PlayableRole.SPECTATOR) {
@@ -45,8 +46,14 @@ class HandleChat (private val shadow: Shadow) : Listener {
         }
 
         // If less than 30 seconds since last chat, cancel
-        if (lastChat[e.player] != null && System.currentTimeMillis().toDouble() - lastChat.getOrDefault(e.player, 0.toDouble()) < 30000) {
-            val secsLeft = ceil((30000 - (System.currentTimeMillis() - lastChat.getOrDefault(e.player, 0).toDouble())) / 1000).toInt()
+        if (lastChat[e.player] != null && System.currentTimeMillis().toDouble() - lastChat.getOrDefault(
+                e.player,
+                0.toDouble()
+            ) < 30000
+        ) {
+            val secsLeft = ceil(
+                (30000 - (System.currentTimeMillis() - lastChat.getOrDefault(e.player, 0).toDouble())) / 1000
+            ).toInt()
             e.isCancelled = true
             e.player.sendMessage(
                 Component.text("You must wait ")

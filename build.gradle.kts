@@ -56,7 +56,8 @@ tasks {
     }
     shadowJar {
         archiveClassifier.set("")
-        destinationDirectory.set(layout.buildDirectory.dir("C:/Users/Gamer/Desktop/Paper 1.20.1/plugins"))
+        destinationDirectory.set(layout.buildDirectory.dir("C:/Users/Osmii/Downloads"))
+        // destinationDirectory.set(layout.buildDirectory.dir("C:/Users/Gamer/Desktop/Paper 1.20.1/plugins"))
     }
     jar {
     }

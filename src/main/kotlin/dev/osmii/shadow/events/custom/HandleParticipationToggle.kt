@@ -48,7 +48,11 @@ class HandleParticipationToggle(val shadow: Shadow) : Listener {
                 PersistentDataType.BYTE_ARRAY,
                 ItemUtil.forbidden(drop = true, use = true, move = true)
             )
-            this.persistentDataContainer.set(Namespace.CUSTOM_ID, PersistentDataType.STRING, CID.HOTBAR_PARTICIPATION_SELECT)
+            this.persistentDataContainer.set(
+                Namespace.CUSTOM_ID,
+                PersistentDataType.STRING,
+                CID.HOTBAR_PARTICIPATION_SELECT
+            )
         }
     }
 }

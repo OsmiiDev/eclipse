@@ -17,18 +17,18 @@ class PacketHideItemSwitch(val shadow: Shadow) : PacketAdapter(
 ) {
     override fun onPacketSending(e: PacketEvent) {
         if (e.packetType != PacketType.Play.Server.ENTITY_EQUIPMENT) return
-        if(e.player.entityId == e.packet.integers.read(0)) return
+        if (e.player.entityId == e.packet.integers.read(0)) return
         val p = e.packet
 
         val equipment = p.slotStackPairLists.read(0)
         val itemSlot = equipment[0].first
         val item = equipment[0].second
 
-        if(itemSlot != EnumWrappers.ItemSlot.MAINHAND) return
+        if (itemSlot != EnumWrappers.ItemSlot.MAINHAND) return
 
         item.itemMeta?.persistentDataContainer?.get(Namespace.CUSTOM_ID, PersistentDataType.STRING)?.let {
             shadow.logger.info("Found custom id $it")
-            if(it == CID.HOTBAR_ABILITY_SELECT) {
+            if (it == CID.HOTBAR_ABILITY_SELECT) {
                 e.isCancelled = true
             }
         }

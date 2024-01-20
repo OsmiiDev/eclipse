@@ -33,6 +33,8 @@ class GameEnd(val shadow: Shadow) {
         if (villagersAlive.get() && shadowsAlive.get()) return
         if (GamePhase.GAME_IN_PROGRESS != shadow.gameState.currentPhase) return
 
+        // Game is over, determine winner
+
         val result = when {
             !villagersAlive.get() && !shadowsAlive.get() -> GameResult.DRAW
             !villagersAlive.get() -> GameResult.SHADOW_WINS
@@ -40,6 +42,7 @@ class GameEnd(val shadow: Shadow) {
             else -> GameResult.DRAW
         }
 
+        shadow.gameState.startTick = -1
         shadow.gameState.currentPhase = GamePhase.IN_BETWEEN_ROUND
 
         when (result) {
@@ -86,7 +89,9 @@ class GameEnd(val shadow: Shadow) {
             }
 
             GameResult.DRAW -> {
-                shadow.server.broadcast(MiniMessage.miniMessage().deserialize("<gray>The game has ended in a draw!</gray>"))
+                shadow.server.broadcast(
+                    MiniMessage.miniMessage().deserialize("<gray>The game has ended in a draw!</gray>")
+                )
                 shadow.server.onlinePlayers.forEach { p ->
                     p.showTitle(
                         Title.title(
@@ -123,14 +128,20 @@ class GameEnd(val shadow: Shadow) {
         if (villagersAlive == 1 && shadowsAlive == 1) {
             // Send anti-stall notification
             shadow.server.onlinePlayers.forEach { p ->
-                p.sendMessage(MiniMessage.miniMessage().deserialize("<red>There are only 2 players left. In ten minutes, anyone not in the end will begin taking damage.</red>"))
+                p.sendMessage(
+                    MiniMessage.miniMessage()
+                        .deserialize("<red>There are only 2 players left. In ten minutes, anyone not in the end will begin taking damage.</red>")
+                )
             }
 
             // If last villager is a sheriff, remove their ability to kill
             shadow.gameState.currentRoles.forEach { (uuid, role) ->
                 if (role.roleFaction == PlayableFaction.VILLAGE && role == PlayableRole.SHERIFF) {
                     shadow.server.getPlayer(uuid)
-                        ?.sendMessage(MiniMessage.miniMessage().deserialize("<red>You are the last villager alive. You will no longer have your instant kill ability.</red>"))
+                        ?.sendMessage(
+                            MiniMessage.miniMessage()
+                                .deserialize("<red>You are the last villager alive. You will no longer have your instant kill ability.</red>")
+                        )
 
                     // Clear sheriff bow from inventory
                     shadow.server.getPlayer(uuid)?.inventory?.iterator()?.forEach { item ->
@@ -171,7 +182,11 @@ class GameEnd(val shadow: Shadow) {
                     Audience.audience(p).sendActionBar(
                         Component.text(minutes.get().toString()).color(color)
                             .append(Component.text(":").color(color))
-                            .append(Component.text(if(seconds.get() < 10) "0${seconds.get()}" else seconds.get().toString()).color(color))
+                            .append(
+                                Component.text(
+                                    if (seconds.get() < 10) "0${seconds.get()}" else seconds.get().toString()
+                                ).color(color)
+                            )
                     )
                 }
 
