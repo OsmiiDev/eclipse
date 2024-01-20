@@ -21,6 +21,13 @@ import java.util.concurrent.atomic.AtomicInteger
 
 class P0InitialCountdown(private val shadow: Shadow) {
     fun startCountdown() {
+        if(shadow.gameState.currentPhase != GamePhase.LOCATION_SELECTED) {
+            shadow.server.broadcast(
+                MiniMessage.miniMessage().deserialize("<red>The location has not been selected yet</red>")
+            )
+        }
+
+
         shadow.gameState.currentRoles.clear()
         shadow.gameState.currentWinners.clear()
         for (player in shadow.server.onlinePlayers) {
