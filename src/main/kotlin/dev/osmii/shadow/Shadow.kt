@@ -3,7 +3,7 @@ package dev.osmii.shadow
 import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.ProtocolManager
 import dev.osmii.shadow.commands.*
-import dev.osmii.shadow.events.BoundingBoxComparator
+import dev.osmii.shadow.util.BoundingBoxComparator
 import dev.osmii.shadow.events.HandleItemInteractionRestrict
 import dev.osmii.shadow.events.CollectStrongholdGeneration
 import dev.osmii.shadow.events.custom.HandleAddRole
