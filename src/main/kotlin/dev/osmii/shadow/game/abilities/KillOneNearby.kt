@@ -1,6 +1,7 @@
 package dev.osmii.shadow.game.abilities
 
 import dev.osmii.shadow.Shadow
+import dev.osmii.shadow.enums.PlayableRole
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Material
@@ -17,14 +18,18 @@ class KillOneNearby : Ability {
     }
     override fun apply(player: Player, shadow: Shadow) {
         // If a server continually runs for around 3.4 years this breaks
-        if(lastKillMap[player] != null && shadow.server.currentTick - lastKillMap[player]!! > COOLDOWN) {
+        if(lastKillMap[player] != null && shadow.server.currentTick - lastKillMap[player]!! < COOLDOWN) {
             player.sendMessage(
                 "Your kill ability is on cooldown for ${
                     (COOLDOWN - (shadow.server.currentTick - lastKillMap[player]!!))/20} seconds")
             return
         }
         val targets = player.world.getNearbyPlayers(player.location,18.0)
+
         targets.remove(player)
+
+        targets.removeIf { shadow.gameState.currentRoles[player.uniqueId] == PlayableRole.SPECTATOR}
+
         if(targets.isNotEmpty()) {
             val killed = targets.sortedBy { target : Player ->
                 player.location.distance(target.location)
