@@ -40,12 +40,18 @@ class ToggleStrength : Ability {
         }
     }
     override fun apply(player: Player, shadow: Shadow) {
-        player.sendMessage("Toggled Strength")
+
         if(player.hasPotionEffect(PotionEffectType.INCREASE_DAMAGE)) {
             player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE)
+            player.sendMessage(
+                MiniMessage.miniMessage().deserialize("<red>Toggled Strength Off</red>")
+            )
         } else {
             player.addPotionEffect(PotionEffect(PotionEffectType.INCREASE_DAMAGE,-1,0,
                 false,false, true))
+            player.sendMessage(
+                MiniMessage.miniMessage().deserialize("<green>Toggled Strength On</green>")
+            )
         }
     }
 }
