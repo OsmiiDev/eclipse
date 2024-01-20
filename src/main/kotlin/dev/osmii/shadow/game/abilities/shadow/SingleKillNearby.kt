@@ -31,6 +31,7 @@ class KillOneNearby : Ability {
         val cooldown =
             TimeUtil.checkCooldown(shadow, COOLDOWN, INITIAL_COOLDOWN, "singlekillnearby", player.uniqueId.toString())
         if (cooldown > 0) {
+            shadow.logger.info("Cooldown: $cooldown")
             player.sendMessage(
                 MiniMessage.miniMessage()
                     .deserialize("<red>This ability is on cooldown for</red> <blue>${TimeUtil.secondsToText(cooldown)}</blue><red>.</red>")
@@ -74,8 +75,8 @@ class KillOneNearby : Ability {
     }
 
     companion object {
-        private const val COOLDOWN = 7 * 60 * 20
-        private const val INITIAL_COOLDOWN = 5 * 60 * 20
+        private const val COOLDOWN = 7 * 60
+        private const val INITIAL_COOLDOWN = 5 * 60
 
     }
 }
