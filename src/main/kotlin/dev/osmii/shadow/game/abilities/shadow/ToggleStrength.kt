@@ -9,6 +9,7 @@ import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.persistence.PersistentDataType
@@ -23,10 +24,10 @@ class ToggleStrength : Ability {
             this.displayName(MiniMessage.miniMessage().deserialize("<red>Empower</red>"))
             this.lore(
                 listOf(
-                    Component.text("<gray>Gain</gray> <blue>Strength I</blue> <gray>.</gray>")
-                        .color(NamedTextColor.GRAY)
+                    MiniMessage.miniMessage().deserialize("<gray>Gain</gray> <blue>Strength I</blue> <gray>.</gray>")
                 )
             )
+            this.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES)
             this.addCustomEffect(
                 PotionEffect(
                     PotionEffectType.INCREASE_DAMAGE,
@@ -45,10 +46,9 @@ class ToggleStrength : Ability {
         }
     }
 
-    private val strength: HashMap<Player, Boolean> = HashMap()
 
     override fun apply(player: Player, shadow: Shadow) {
-        strength.getOrPut(player) { false }
+        if (!strength.containsKey(player)) strength[player] = false
         strength[player] = !strength[player]!!
 
         player.sendMessage(
@@ -63,5 +63,9 @@ class ToggleStrength : Ability {
         )
         else player.removePotionEffect(PotionEffectType.INCREASE_DAMAGE)
 
+    }
+
+    companion object {
+        val strength = mutableMapOf<Player, Boolean>()
     }
 }

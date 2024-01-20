@@ -20,10 +20,10 @@ class KillOneNearby : Ability {
             this.lore(
                 listOf(
                     MiniMessage.miniMessage()
-                        .deserialize("<gray>Instantly kill the nearest player within</gray> <blue>18</blue> <gray>blocks.</gray>")
+                        .deserialize("<!i><gray>Instantly kill the nearest player within</gray> <blue>18</blue> <gray>blocks.</gray></!i>")
                 )
             )
-            this.displayName(MiniMessage.miniMessage().deserialize("<red>Assassinate</red>"))
+            this.displayName(MiniMessage.miniMessage().deserialize("<!i><red>Assassinate</red></!i>"))
         }
     }
 
@@ -31,8 +31,10 @@ class KillOneNearby : Ability {
         val cooldown =
             TimeUtil.checkCooldown(shadow, COOLDOWN, INITIAL_COOLDOWN, "singlekillnearby", player.uniqueId.toString())
         if (cooldown > 0) {
-            MiniMessage.miniMessage()
-                .deserialize("<red>This ability is on cooldown for</red> <blue>${TimeUtil.secondsToText(cooldown)}</blue><red>.</red>")
+            player.sendMessage(
+                MiniMessage.miniMessage()
+                    .deserialize("<red>This ability is on cooldown for</red> <blue>${TimeUtil.secondsToText(cooldown)}</blue><red>.</red>")
+            )
             return
         }
 
@@ -74,5 +76,6 @@ class KillOneNearby : Ability {
     companion object {
         private const val COOLDOWN = 7 * 60 * 20
         private const val INITIAL_COOLDOWN = 5 * 60 * 20
+
     }
 }
