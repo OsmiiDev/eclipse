@@ -188,6 +188,7 @@ class P3SpawnEnderEyes(private val shadow: Shadow) {
 
         // Finish phase
         shadow.gameState.currentPhase = GamePhase.GAME_IN_PROGRESS
+        P4FinalInitializations(shadow).init()
     }
 
     private fun createEnderEye(loc : Location) : Item {

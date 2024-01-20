@@ -19,11 +19,11 @@ class KillOneNearby : Ability {
     }
     override fun apply(player: Player, shadow: Shadow) {
         // If a server continually runs for around 3.4 years this breaks
-        if(lastKillMap[player] != null && shadow.server.currentTick - lastKillMap[player]!! < COOLDOWN) {
+        if(cooldownMap[player] != null && shadow.server.currentTick > cooldownMap[player]!!) {
             player.sendMessage(
                 MiniMessage.miniMessage().deserialize(
                 "<red>Your kill ability is on cooldown for ${
-                    (COOLDOWN - (shadow.server.currentTick - lastKillMap[player]!!))/20} seconds</red>")
+                    (COOLDOWN - (shadow.server.currentTick - cooldownMap[player]!!))/20} seconds</red>")
             )
             return
         }
@@ -40,7 +40,7 @@ class KillOneNearby : Ability {
             killed[0].health = 0.0
             killed[0].sendHealthUpdate()
             player.sendMessage(Component.text("Killed ").append(killed[0].displayName()))
-            lastKillMap[player] = shadow.server.currentTick
+            cooldownMap[player] = shadow.server.currentTick + COOLDOWN
         } else {
             player.sendMessage(
                 MiniMessage.miniMessage().deserialize("<red>No nearby players to kill</red>")
@@ -50,6 +50,6 @@ class KillOneNearby : Ability {
     }
     companion object {
         private const val COOLDOWN = 7*60*20
-        val lastKillMap = HashMap<Player,Int>()
+        val cooldownMap = HashMap<Player,Int>()
     }
 }
