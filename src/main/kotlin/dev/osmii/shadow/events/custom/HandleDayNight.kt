@@ -12,6 +12,7 @@ import org.bukkit.Bukkit
 import org.bukkit.World
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
+import org.yaml.snakeyaml.serializer.Serializer
 
 class HandleDayNight(val shadow: Shadow) {
 
@@ -64,19 +65,30 @@ class HandleDayNight(val shadow: Shadow) {
                             }
                             if (alreadyUpdated) return@inner
 
-                            val container = PacketContainer(PacketType.Play.Server.ENTITY_METADATA)
+                            val container = shadow.protocolManager?.createPacket(PacketType.Play.Server.ENTITY_METADATA)
+                            if (container == null) {
+                                shadow.logger.warning("ProtocolLib failure: container is null")
+                                return@inner
+                            }
 
                             val watcher = WrappedDataWatcher()
+                            val serializer: WrappedDataWatcher.Serializer? =
+                                WrappedDataWatcher.Registry.get(java.lang.Byte::class.java)
                             watcher.entity = other
                             watcher.setObject(
                                 0,
-                                WrappedDataWatcher.Registry.get(java.lang.Byte::class.java),
+                                serializer,
                                 0x40.toByte(),
                                 true
                             )
                             container.integers.write(0, other.entityId) // The entity ID
                             container.watchableCollectionModifier.write(0, watcher.watchableObjects) // The data watcher
-                            shadow.protocolManager!!.sendServerPacket(p, container)
+                            try {
+                                shadow.protocolManager!!.sendServerPacket(p, container)
+                            } catch (e: Exception) {
+                                shadow.logger.warning("ProtocolLib failure: ${e.message}")
+                                e.printStackTrace()
+                            }
                             glowingUpdatedFor.add(Pair(other.entityId, p.entityId))
                         }
                     }

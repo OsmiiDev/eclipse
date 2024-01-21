@@ -74,6 +74,35 @@ class HandleChat(private val shadow: Shadow) : Listener {
             return
         }
 
+        var missed = false;
+        e.viewers().clear()
+        for (player in shadow.server.onlinePlayers) {
+            // check that player is not a spectator
+            if (shadow.gameState.currentRoles[player.uniqueId] != PlayableRole.SPECTATOR) {
+                e.viewers().add(player)
+                continue;
+            }
+
+            // check that player is within 34 blocks
+            if (player.world != e.player.world) {
+                missed = true;
+                continue;
+            }
+
+            if (player.location.distance(e.player.location) < 24) {
+                e.viewers().add(player)
+            } else {
+                missed = true;
+            }
+        }
+
+        if (missed) {
+            Audience.audience(e.player).sendActionBar(
+                MiniMessage.miniMessage().deserialize(
+                    "<gold>Some players were too far to receive.</gold>"
+                )
+            )
+        }
         lastChat[e.player] = System.currentTimeMillis().toDouble()
     }
 }

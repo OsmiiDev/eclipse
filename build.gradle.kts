@@ -8,7 +8,7 @@ plugins {
 apply(plugin = "io.papermc.paperweight.userdev")
 
 group = "dev.osmii"
-version = "1.1-SNAPSHOT"
+version = "1.2"
 
 repositories {
     mavenCentral()

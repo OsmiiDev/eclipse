@@ -13,6 +13,7 @@ import dev.osmii.shadow.enums.GamePhase
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Location
 import org.bukkit.entity.Player
+import org.bukkit.generator.structure.StructureType
 import org.bukkit.util.BoundingBox
 import kotlin.math.cos
 import kotlin.math.sin
@@ -28,6 +29,9 @@ class L1SelectLocation(private val shadow: Shadow) {
             center.z - WORLD_BORDER_SIZE)
 
         var strongholdBoundingBox : BoundingBox? = null
+        if(center.world.locateNearestStructure(center, StructureType.STRONGHOLD, 1000, false) == null) return false
+
+        val loc: Location = center.world.locateNearestStructure(center, StructureType.STRONGHOLD, 1000, false)!!.location
 
         for (bb in shadow.boundingBoxSet) {
             if (worldBorderBoundingBox.overlaps(bb)) {
@@ -62,7 +66,7 @@ class L1SelectLocation(private val shadow: Shadow) {
         if(!checkForStronghold(location)) {
             shadow.server.broadcast(
                 MiniMessage.miniMessage().deserialize(
-                    "<red>Failed to start game. No Portal Room within Area</red>"
+                    "<red>Failed to start game. No portal room within area.</red>"
                 )
             )
             shadow.gameState.currentPhase = GamePhase.IN_BETWEEN_ROUND

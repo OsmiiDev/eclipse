@@ -18,6 +18,8 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerRespawnEvent
 
 class HandleDeath(private val shadow: Shadow) : Listener {
+    var checking = false
+
     // Handles player deaths and sheriff misfires
     @EventHandler(priority = EventPriority.LOW)
     fun onPlayerDeath(e: PlayerDeathEvent) {
@@ -53,10 +55,15 @@ class HandleDeath(private val shadow: Shadow) : Listener {
 
         shadow.gameState.currentRoles[p.uniqueId] = PlayableRole.SPECTATOR
 
-        Bukkit.getScheduler().runTaskLater(shadow, Runnable {
-            GameEnd(shadow).checkGameEnd()
-            GameEnd(shadow).checkAntiStall()
-        }, 20)
+        if (!checking) {
+            Bukkit.getScheduler().runTaskLater(shadow, Runnable {
+                checking = false
+                GameEnd(shadow).checkGameEnd()
+                GameEnd(shadow).checkAntiStall()
+            }, 20)
+            checking = true
+        }
+
         shadow.logger.info(shadow.gameState.currentRoles.toString())
     }
 
