@@ -74,25 +74,25 @@ class HandleChat(private val shadow: Shadow) : Listener {
             return
         }
 
-        var missed = false;
+        var missed = false
         e.viewers().clear()
         for (player in shadow.server.onlinePlayers) {
             // check that player is not a spectator
             if (shadow.gameState.currentRoles[player.uniqueId] != PlayableRole.SPECTATOR) {
                 e.viewers().add(player)
-                continue;
+                continue
             }
 
             // check that player is within 34 blocks
             if (player.world != e.player.world) {
-                missed = true;
-                continue;
+                missed = true
+                continue
             }
 
             if (player.location.distance(e.player.location) < 24) {
                 e.viewers().add(player)
             } else {
-                missed = true;
+                missed = true
             }
         }
 

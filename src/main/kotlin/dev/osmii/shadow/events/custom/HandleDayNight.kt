@@ -1,7 +1,6 @@
 package dev.osmii.shadow.events.custom
 
 import com.comphenix.protocol.PacketType
-import com.comphenix.protocol.events.PacketContainer
 import com.comphenix.protocol.wrappers.WrappedDataWatcher
 import dev.osmii.shadow.Shadow
 import dev.osmii.shadow.enums.GamePhase
@@ -12,7 +11,6 @@ import org.bukkit.Bukkit
 import org.bukkit.World
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import org.yaml.snakeyaml.serializer.Serializer
 
 class HandleDayNight(val shadow: Shadow) {
 

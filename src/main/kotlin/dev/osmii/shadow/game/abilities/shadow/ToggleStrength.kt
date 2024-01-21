@@ -4,8 +4,6 @@ import dev.osmii.shadow.Shadow
 import dev.osmii.shadow.enums.Namespace
 import dev.osmii.shadow.game.abilities.Ability
 import dev.osmii.shadow.util.ItemUtil
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -24,7 +22,8 @@ class ToggleStrength : Ability {
             this.displayName(MiniMessage.miniMessage().deserialize("<!i><red>Empower</red></!i>"))
             this.lore(
                 listOf(
-                    MiniMessage.miniMessage().deserialize("<!i><gray>Gain</gray> <blue>Strength I</blue> <gray>.</gray></!i>")
+                    MiniMessage.miniMessage()
+                        .deserialize("<!i><gray>Gain</gray> <blue>Strength I</blue> <gray>.</gray></!i>")
                 )
             )
             this.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS, ItemFlag.HIDE_ATTRIBUTES)

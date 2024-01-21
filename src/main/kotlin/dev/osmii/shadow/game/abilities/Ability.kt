@@ -5,7 +5,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 interface Ability {
-    val item : ItemStack
+    val item: ItemStack
 
-    fun apply(player : Player, shadow : Shadow)
+    fun apply(player: Player, shadow: Shadow)
 }

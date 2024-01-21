@@ -37,7 +37,11 @@ class P2GiveItems(private val shadow: Shadow) {
                         PersistentDataType.BYTE_ARRAY,
                         ItemUtil.forbidden(drop = true, use = false, move = false, moveContainer = true)
                     )
-                    this.persistentDataContainer.set(Namespace.CUSTOM_ID, PersistentDataType.STRING, CID.INVENTORY_SHERIFF_BOW)
+                    this.persistentDataContainer.set(
+                        Namespace.CUSTOM_ID,
+                        PersistentDataType.STRING,
+                        CID.INVENTORY_SHERIFF_BOW
+                    )
                 }
                 player.inventory.setItem(9, bow)
             }
@@ -53,7 +57,11 @@ class P2GiveItems(private val shadow: Shadow) {
                     PersistentDataType.BYTE_ARRAY,
                     ItemUtil.forbidden(drop = true, use = false, move = true, moveContainer = true)
                 )
-                this.persistentDataContainer.set(Namespace.CUSTOM_ID, PersistentDataType.STRING, CID.HOTBAR_ABILITY_SELECT)
+                this.persistentDataContainer.set(
+                    Namespace.CUSTOM_ID,
+                    PersistentDataType.STRING,
+                    CID.HOTBAR_ABILITY_SELECT
+                )
             }
             player.inventory.setItem(8, abilitySelector)
         }

@@ -49,11 +49,12 @@ application {
 tasks {
     assemble {
         dependsOn(reobfJar)
+        dependsOn("shadowJar")
     }
 
     build {
-        dependsOn("shadowJar")
     }
+
     shadowJar {
         archiveClassifier.set("")
         destinationDirectory.set(layout.buildDirectory.dir("C:/Users/Osmii/Downloads"))

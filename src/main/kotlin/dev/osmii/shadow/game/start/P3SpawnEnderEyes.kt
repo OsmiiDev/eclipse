@@ -36,12 +36,10 @@ class P3SpawnEnderEyes(private val shadow: Shadow) {
 
         for (i in 1..ENDER_EYE_OVERWORLD_COUNT) {
             val x = Random.nextInt(
-                (-WORLD_BORDER_SIZE).toInt(),
-                WORLD_BORDER_SIZE.toInt()
+                (-WORLD_BORDER_SIZE).toInt(), WORLD_BORDER_SIZE.toInt()
             ) + overworld.spawnLocation.x.toInt()
             val z = Random.nextInt(
-                (-WORLD_BORDER_SIZE).toInt(),
-                WORLD_BORDER_SIZE.toInt()
+                (-WORLD_BORDER_SIZE).toInt(), WORLD_BORDER_SIZE.toInt()
             ) + overworld.spawnLocation.z.toInt()
             val loc = overworld.getHighestBlockAt(x, z).location // World 0 is overworld
             loc.add(0.0, 1.0, 0.0)
@@ -81,28 +79,26 @@ class P3SpawnEnderEyes(private val shadow: Shadow) {
         // Creates a mask that checks for this
         strongholdMask.add(
             OffsetMask(
-                Masks.negate(ExistingBlockMask(session)),
-                BlockVector3.at(0, 1, 0), -64, 315
+                Masks.negate(ExistingBlockMask(session)), BlockVector3.at(0, 1, 0), -64, 315
             )
         ) // FAWE only has support for OffsetMask, not OffsetsMasks
         strongholdMask.add(
             OffsetMask(
-                Masks.negate(ExistingBlockMask(session)),
-                BlockVector3.at(0, 2, 0), -64, 315
+                Masks.negate(ExistingBlockMask(session)), BlockVector3.at(0, 2, 0), -64, 315
             )
         )
 
         val stoneBrickMask = BlockTypeMask(
-            session,
-            BlockTypes.STONE_BRICKS,
-            BlockTypes.CRACKED_STONE_BRICKS,
-            BlockTypes.MOSSY_STONE_BRICKS
+            session, BlockTypes.STONE_BRICKS, BlockTypes.CRACKED_STONE_BRICKS, BlockTypes.MOSSY_STONE_BRICKS
         )
         strongholdMask.add(stoneBrickMask)
 
         val worldBorderBoundingBox = BoundingBox(
-            overworld.spawnLocation.x + WORLD_BORDER_SIZE, -64.0,
-            overworld.spawnLocation.z + WORLD_BORDER_SIZE, overworld.spawnLocation.x - WORLD_BORDER_SIZE, 315.0,
+            overworld.spawnLocation.x + WORLD_BORDER_SIZE,
+            -64.0,
+            overworld.spawnLocation.z + WORLD_BORDER_SIZE,
+            overworld.spawnLocation.x - WORLD_BORDER_SIZE,
+            315.0,
             overworld.spawnLocation.z - WORLD_BORDER_SIZE
         )
 
@@ -134,8 +130,7 @@ class P3SpawnEnderEyes(private val shadow: Shadow) {
         stoneBrickPattern.add(BlockTypes.MOSSY_STONE_BRICKS!!.defaultState, 0.01)
 
         session2.replaceBlocks(
-            region, BlockTypes.STRUCTURE_BLOCK!!.allStates.map { it.toBaseBlock() }.toSet(),
-            stoneBrickPattern
+            region, BlockTypes.STRUCTURE_BLOCK!!.allStates.map { it.toBaseBlock() }.toSet(), stoneBrickPattern
         )
 
         session2.close()
@@ -205,12 +200,10 @@ class P3SpawnEnderEyes(private val shadow: Shadow) {
 
         for (i in 1..ENDER_EYE_NETHER_ROOF_COUNT) {
             val x = Random.nextInt(
-                (-WORLD_BORDER_SIZE).toInt(),
-                WORLD_BORDER_SIZE.toInt()
+                (-WORLD_BORDER_SIZE).toInt(), WORLD_BORDER_SIZE.toInt()
             ) + overworld.spawnLocation.x.toInt() / 8
             val z = Random.nextInt(
-                (-WORLD_BORDER_SIZE).toInt(),
-                WORLD_BORDER_SIZE.toInt()
+                (-WORLD_BORDER_SIZE).toInt(), WORLD_BORDER_SIZE.toInt()
             ) + overworld.spawnLocation.z.toInt() / 8
             val loc = Location(nether, x.toDouble(), 128.0, z.toDouble())
 

@@ -5,7 +5,6 @@ import dev.osmii.shadow.enums.PlayableRole
 import dev.osmii.shadow.game.rolelist.Rolelist
 import org.bukkit.entity.Player
 import java.util.*
-import kotlin.collections.HashMap
 
 class ShadowGameState {
     var currentPhase: GamePhase = GamePhase.NONE

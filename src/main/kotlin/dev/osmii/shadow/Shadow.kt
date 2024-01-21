@@ -3,15 +3,15 @@ package dev.osmii.shadow
 import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.ProtocolManager
 import dev.osmii.shadow.commands.*
-import dev.osmii.shadow.util.BoundingBoxComparator
-import dev.osmii.shadow.events.HandleItemInteractionRestrict
 import dev.osmii.shadow.events.CollectStrongholdGeneration
+import dev.osmii.shadow.events.HandleItemInteractionRestrict
 import dev.osmii.shadow.events.custom.HandleAddRole
 import dev.osmii.shadow.events.custom.HandleDayNight
 import dev.osmii.shadow.events.custom.HandleParticipationToggle
 import dev.osmii.shadow.events.custom.abilities.item.sheriff.HandleSheriffBow
 import dev.osmii.shadow.events.custom.abilities.menu.HandleAbilities
 import dev.osmii.shadow.events.game.*
+import dev.osmii.shadow.util.BoundingBoxComparator
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scoreboard.Team
@@ -22,7 +22,7 @@ import java.util.logging.Logger
 class Shadow : JavaPlugin() {
     var gameState: ShadowGameState = ShadowGameState()
     var protocolManager: ProtocolManager? = null
-    val boundingBoxSet : ConcurrentSkipListSet<BoundingBox> = ConcurrentSkipListSet(BoundingBoxComparator())
+    val boundingBoxSet: ConcurrentSkipListSet<BoundingBox> = ConcurrentSkipListSet(BoundingBoxComparator())
 
     override fun onEnable() {
         protocolManager = ProtocolLibrary.getProtocolManager()

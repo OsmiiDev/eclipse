@@ -105,14 +105,13 @@ class RolelistSelector : Comparable<RolelistSelector> {
         if (faction != null && other.faction != null) {
             if (faction!!.ordinal > other.faction!!.ordinal) return 1
             if (faction!!.ordinal < other.faction!!.ordinal) return -1
-        }
-        else if (faction != null) return 1
+        } else if (faction != null) return 1
         else if (other.faction != null) return -1
 
         if (roles.size > other.roles.size) return 1
         if (roles.size < other.roles.size) return -1
 
-        return 0
+        return (selectorText as TextComponent).content().compareTo((other.selectorText as TextComponent).content())
     }
 
     override fun toString(): String {

@@ -22,12 +22,14 @@ object ItemUtil {
     }
 
     fun customIdIs(item: ItemStack, customId: String): Boolean {
-        if(item.itemMeta == null) return false
-        return item.itemMeta?.persistentDataContainer?.getOrDefault(Namespace.CUSTOM_ID, PersistentDataType.STRING, "").equals(customId)
+        if (item.itemMeta == null) return false
+        return item.itemMeta?.persistentDataContainer?.getOrDefault(Namespace.CUSTOM_ID, PersistentDataType.STRING, "")
+            .equals(customId)
     }
 
     fun customKeyIs(namespace: NamespacedKey, item: ItemStack, customId: String): Boolean {
-        if(item.itemMeta == null) return false
-        return item.itemMeta?.persistentDataContainer?.getOrDefault(namespace, PersistentDataType.STRING, "").equals(customId)
+        if (item.itemMeta == null) return false
+        return item.itemMeta?.persistentDataContainer?.getOrDefault(namespace, PersistentDataType.STRING, "")
+            .equals(customId)
     }
 }

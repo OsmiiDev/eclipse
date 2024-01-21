@@ -14,13 +14,16 @@ import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.entity.Player
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 class P1AssignRoles(private val shadow: Shadow) {
     fun assignRoles() {
         var players = ArrayList<Player>(shadow.server.onlinePlayers)
-        players = players.filter { shadow.gameState.participationStatus.getOrDefault(it.uniqueId, false)} as ArrayList<Player>
+        players = players.filter {
+            shadow.gameState.participationStatus.getOrDefault(
+                it.uniqueId,
+                false
+            )
+        } as ArrayList<Player>
 
         if (players.size < shadow.gameState.originalRolelist.roles.size) {
             shadow.server.broadcast(
@@ -58,9 +61,17 @@ class P1AssignRoles(private val shadow: Shadow) {
                 shadow.logger.warning("Player $uuid is null!")
                 return@forEach
             }
-            if (role.roleFaction == PlayableFaction.SPECTATOR) player.sendMessage(MiniMessage.miniMessage().deserialize("<gray><i>You are spectating this game.</i></gray>"))
-            if (role.roleFaction == PlayableFaction.SHADOW) player.sendMessage(MiniMessage.miniMessage().deserialize("<red>You are a shadow. Protect the dragon, kill all villagers, and stay hidden.</red>"))
-            if (role.roleFaction == PlayableFaction.VILLAGE) player.sendMessage(MiniMessage.miniMessage().deserialize("<green>You are a villager. Kill the dragon, or find the shadows, and stay alive.</green>"))
+            if (role.roleFaction == PlayableFaction.SPECTATOR) player.sendMessage(
+                MiniMessage.miniMessage().deserialize("<gray><i>You are spectating this game.</i></gray>")
+            )
+            if (role.roleFaction == PlayableFaction.SHADOW) player.sendMessage(
+                MiniMessage.miniMessage()
+                    .deserialize("<red>You are a shadow. Protect the dragon, kill all villagers, and stay hidden.</red>")
+            )
+            if (role.roleFaction == PlayableFaction.VILLAGE) player.sendMessage(
+                MiniMessage.miniMessage()
+                    .deserialize("<green>You are a villager. Kill the dragon, or find the shadows, and stay alive.</green>")
+            )
 
             if (role.roleFaction == PlayableFaction.SHADOW) player.showTitle(
                 Title.title(
@@ -86,11 +97,11 @@ class P1AssignRoles(private val shadow: Shadow) {
             )
 
             // Set gamemodes
-            if(role != PlayableRole.SPECTATOR) player.gameMode = GameMode.SURVIVAL
-            if(role == PlayableRole.SPECTATOR) player.gameMode = GameMode.SPECTATOR
+            if (role != PlayableRole.SPECTATOR) player.gameMode = GameMode.SURVIVAL
+            if (role == PlayableRole.SPECTATOR) player.gameMode = GameMode.SPECTATOR
 
             Bukkit.getScheduler().runTaskLater(shadow, Runnable {
-                if(role.roleFaction != PlayableFaction.SPECTATOR) player.sendMessage(
+                if (role.roleFaction != PlayableFaction.SPECTATOR) player.sendMessage(
                     Component.text("Your role is: ")
                         .color(NamedTextColor.GRAY)
                         .append(Component.text(role.roleName).color(role.roleColor))
@@ -107,7 +118,7 @@ class P1AssignRoles(private val shadow: Shadow) {
             }, 100)
 
             // /shadowchat tip
-            if(role == PlayableRole.SHADOW) {
+            if (role == PlayableRole.SHADOW) {
                 player.sendMessage(
                     Component.text("The shadows are: ")
                         .color(NamedTextColor.RED)
@@ -122,7 +133,8 @@ class P1AssignRoles(private val shadow: Shadow) {
                 )
 
                 player.sendMessage(
-                    MiniMessage.miniMessage().deserialize("<red><i>You can use <gold>/sc <message></gold> to talk to other shadows!</i></red>")
+                    MiniMessage.miniMessage()
+                        .deserialize("<red><i>You can use <gold>/sc <message></gold> to talk to other shadows!</i></red>")
                 )
             }
         }
